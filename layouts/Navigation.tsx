@@ -50,12 +50,12 @@ export default function Navigation() {
               options={{
                 headerTitle: item?.title,
                 tabBarShowLabel: false,
-                tabBarIcon: ({focused, size}) => {
+                tabBarIcon: ({focused}) => {
                   return (
                     <Icon
                       name={focused ? item?.icon?.focus : item?.icon?.default}
                       color={focused ? '#00ada9' : 'gray'}
-                      size={26}
+                      size={focused ? 28 : 26}
                     />
                   );
                 },

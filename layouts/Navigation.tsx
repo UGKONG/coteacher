@@ -13,25 +13,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-const icon = {
-  home: {
-    default: 'people-outline',
-    focus: 'people-sharp',
-  },
-  notice: {
-    default: 'notifications-outline',
-    focus: 'notifications-sharp',
-  },
-  setting: {
-    default: 'ios-construct-outline',
-    focus: 'ios-construct',
-  },
-  none: {
-    default: 'ios-help-outline',
-    focus: 'ios-help-sharp',
-  },
-};
-
 export default function Navigation() {
   // const user = useSelector((x: Store) => x?.user);
   const navigation = useNavigation();

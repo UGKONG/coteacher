@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+
 import {Text} from 'react-native';
 import Container from '../../layouts/Container';
 

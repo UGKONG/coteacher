@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "253301667403",
+    "project_id": "coteacher-2eddf",
+    "storage_bucket": "coteacher-2eddf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253301667403:android:cb373df90352b03fd17fce",
+        "android_client_info": {
+          "package_name": "com.coteacher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253301667403-jm62rt7hm1eco7tvvl8cuejhu43egprc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATpezLLg8go2aV-KsU3RnUFJcKYMPqgNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "253301667403-jm62rt7hm1eco7tvvl8cuejhu43egprc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "253301667403-jn8dm8evt2m3dt7s3uaftblhgujqquvb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.coteacher"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

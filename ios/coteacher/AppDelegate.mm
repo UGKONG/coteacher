@@ -1,8 +1,8 @@
 #import "AppDelegate.h"
 
-//#import <Firebase.h>
-//#import <FirebaseCore.h>
-//#import <FirebaseMessaging.h>
+#import <Firebase.h>
+#import <FirebaseCore.h>
+#import <FirebaseMessaging.h>
 
 //#import <RNKakaoLogins.h>
 
@@ -15,12 +15,10 @@
   self.moduleName = @"coteacher";
   self.initialProps = @{};
 
-//  if ([FIRApp defaultApp] == nil) {
-//    [FIRApp configure];
-//  }
-  
-
-//  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter]; // 추가
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 import {ActivityIndicator} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -8,12 +6,17 @@ type Props = {
   color?: string;
 };
 
-export default function Loading({size = 'large', color = '#00ADA9'}: Props) {
-  return <ActivityIndicator size={size} color={color} />;
+export default function Loading({size = 'large', color = '#dedede'}: Props) {
+  return (
+    <LoadingContainer>
+      <ActivityIndicator size={size} color={color} />
+    </LoadingContainer>
+  );
 }
 
-export const LoadingContainer = styled.View`
+const LoadingContainer = styled.View`
   justify-content: center;
   align-items: center;
-  height: 100px;
+  min-height: 200px;
+  max-height: 500px;
 `;

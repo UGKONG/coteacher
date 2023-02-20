@@ -1,5 +1,5 @@
-/* eslint-disable curly */
 /* eslint-disable react-hooks/rules-of-hooks */
+import {createConnection} from 'mysql';
 import axios from 'axios';
 import {hangulIncludes, josa} from '@toss/hangul';
 import {isEmail, isMobilePhone, isRRN} from '@toss/validators';
@@ -311,6 +311,44 @@ export const useIsInArray = (
 ): boolean => {
   let result: boolean = arrayIncludes(array, item);
   return result;
+};
+
+/**
+ * @example
+ * const { error, result, sql } = await useDatabase(`
+ *   SELECT * FROM 테이블명
+ *   WHERE USER_ID = ? AND USER_PW = ?;
+ * `, ['USER_ID', 'USER_PW']);
+ */
+export const useDatabase = (
+  sql: string,
+  sqlParams?: Array<string | number>,
+): Promise<ConnectionReturn> => {
+  const config: ConnectionConfig = {
+    host: process.env.DB_HOST as string,
+    user: process.env.DB_USER as string,
+    password: process.env.DB_PASSWORD as string,
+    database: process.env.DB_DATABASE as string,
+    dateStrings: true,
+    multipleStatements: true,
+  };
+  const db = createConnection(config);
+
+  let sqlString = sql;
+
+  if (sqlParams) {
+    sqlParams?.forEach(param => {
+      sqlString = sqlString.replace('?', String(param));
+    });
+  }
+
+  return new Promise(success => {
+    db.query(sql, sqlParams ?? [], (error: Error | null, result: any) => {
+      db.end();
+      if (error) console.log(error);
+      success({error, result, sql: sqlString});
+    });
+  });
 };
 
 /**

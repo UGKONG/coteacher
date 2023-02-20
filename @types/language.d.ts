@@ -1,4 +1,4 @@
-type Languages =
+declare type Languages =
   | '1c'
   | 'abnf'
   | 'accesslog'
@@ -189,3 +189,8 @@ type Languages =
   | 'xquery'
   | 'yaml'
   | 'zephir';
+
+declare type Language = {
+  LANG_SQ: number;
+  LANG_NM: string;
+};

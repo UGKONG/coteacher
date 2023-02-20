@@ -10,7 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "typeRoots": [
-      "@types"
+      "@types",
+      "node_modules/@types"
     ]
   }
 }

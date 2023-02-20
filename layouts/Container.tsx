@@ -1,5 +1,3 @@
-/* eslint-disable curly */
-/* eslint-disable react/react-in-jsx-scope */
 import {useState} from 'react';
 import {RefreshControl} from 'react-native';
 import styled from 'styled-components/native';

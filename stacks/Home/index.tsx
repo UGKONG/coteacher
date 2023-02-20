@@ -1,6 +1,7 @@
-/* eslint-disable react/react-in-jsx-scope */
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../../screens/Home';
+import PostScreen from '../../screens/Post';
+import PostDetailScreen from '../../screens/PostDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -10,7 +11,17 @@ export default function HomeStack() {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{title: '홈'}}
+        options={{title: '언어'}}
+      />
+      <Stack.Screen
+        name="PostScreen"
+        component={PostScreen}
+        options={{title: '스킬'}}
+      />
+      <Stack.Screen
+        name="PostDetailScreen"
+        component={PostDetailScreen}
+        options={{title: ''}}
       />
     </Stack.Navigator>
   );

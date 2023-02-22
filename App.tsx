@@ -1,16 +1,24 @@
-/* eslint-disable react/react-in-jsx-scope */
-
-import {useEffect} from 'react';
-import {StatusBar} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import {useEffect, useMemo} from 'react';
+import {Platform, StatusBar} from 'react-native';
 import Navigation from './layouts/Navigation';
+import SplashScreen from 'react-native-splash-screen';
+
+type BarStyle = 'default' | 'dark-content' | 'light-content';
+
+const os = Platform.OS;
 
 export default function App() {
-  useEffect(() => SplashScreen.hide(), []);
+  const barStyle = useMemo<BarStyle>(() => {
+    return os === 'ios' ? 'dark-content' : 'light-content';
+  }, [os]);
+
+  useEffect(() => {
+    setTimeout(() => SplashScreen.hide(), 1000);
+  }, []);
 
   return (
     <>
-      <StatusBar barStyle={'default'} />
+      <StatusBar barStyle={barStyle} />
       <Navigation />
     </>
   );

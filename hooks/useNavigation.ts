@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import BookStack from '../stacks/Book';
 import HomeStack from '../stacks/Home';
 import SettingStack from '../stacks/Setting';
 
@@ -22,6 +23,13 @@ export default function useNavigation() {
       },
       {
         id: 2,
+        name: 'Book',
+        title: '북마크',
+        icon: {default: 'ios-star-outline', focus: 'ios-star'},
+        component: BookStack,
+      },
+      {
+        id: 3,
         name: 'Setting',
         title: '설정',
         icon: {default: 'ios-construct-outline', focus: 'ios-construct'},

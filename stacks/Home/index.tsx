@@ -16,7 +16,7 @@ export default function HomeStack() {
       <Stack.Screen
         name="PostScreen"
         component={PostScreen}
-        options={{title: '스킬'}}
+        options={{title: '기술'}}
       />
       <Stack.Screen
         name="PostDetailScreen"

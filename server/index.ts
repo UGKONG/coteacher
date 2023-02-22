@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import testRoute from './routes/test';
 import languageRoute from './routes/language';
 import postRoute from './routes/post';
+import bookRoute from './routes/bookmark';
 
 dotenv.config();
 
@@ -19,5 +20,6 @@ app.use('/img', express.static(__dirname + '/../assets/langIcons'));
 app.use('/api/test', testRoute);
 app.use('/api/language', languageRoute);
 app.use('/api/post', postRoute);
+app.use('/api/book', bookRoute);
 
 app.listen(port, () => console.log('React Native Server Started.'));

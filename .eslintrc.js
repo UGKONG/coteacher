@@ -8,6 +8,8 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'no-path-concat': 'off',
     '@typescript-eslint/no-shadow': 'off',
+    'react/no-unstable-nested-components': 'off',
+    'react-native/no-inline-styles': 'off',
     curly: 'off',
   },
 };

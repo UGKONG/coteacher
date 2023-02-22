@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import {createConnection} from 'mysql';
 import axios from 'axios';
 import {hangulIncludes, josa} from '@toss/hangul';
@@ -332,6 +331,7 @@ export const useDatabase = (
     dateStrings: true,
     multipleStatements: true,
   };
+
   const db = createConnection(config);
 
   let sqlString = sql;

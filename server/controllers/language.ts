@@ -6,7 +6,10 @@ export const getLanguages = async (req: Request, res: Response) => {
     SELECT * FROM tb_language ORDER BY LANG_NM;
   `);
 
-  if (error) return res.send(fail());
+  if (error) {
+    console.log(error);
+    return res.send(fail());
+  }
 
   res.send(success(result));
 };

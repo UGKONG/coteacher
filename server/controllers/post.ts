@@ -22,12 +22,24 @@ export const getPosts = async (req: Request, res: Response) => {
 // 게시글 상세 조회
 export const getPost = async (req: Request, res: Response) => {
   const POST_SQ = req?.params?.POST_SQ;
+  const USER_SQ = req?.query?.USER_SQ ?? req?.body?.USER_SQ;
 
   const {error, result} = await useDatabase(
     `
-    SELECT * FROM tb_post WHERE POST_SQ = ?;
+    SELECT
+    a.POST_SQ, a.LANG_SQ, b.LANG_NM, a.POST_TTL,
+    a.POST_CN, a.POST_CD, a.POST_VIDEO_SQ, a.POST_MOD_DT, 
+    a.POST_CRT_DT, IF(c.IS_BOOK > 0, 1, 0) AS IS_BOOK, c.BOOK_SQ
+    FROM tb_post a
+    LEFT JOIN tb_language b
+      ON a.LANG_SQ = b.LANG_SQ
+    LEFT JOIN (
+      SELECT BOOK_SQ, POST_SQ, COUNT(*) AS IS_BOOK FROM tb_bookmark
+      WHERE USER_SQ = ?
+    ) c ON a.POST_SQ = c.POST_SQ
+    WHERE a.POST_SQ = ?
   `,
-    [POST_SQ],
+    [USER_SQ, POST_SQ],
   );
 
   if (error) return res.send(fail());

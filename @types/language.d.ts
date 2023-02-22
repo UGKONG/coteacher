@@ -76,6 +76,7 @@ declare type Languages =
   | 'haskell'
   | 'haxe'
   | 'hsp'
+  | 'html'
   | 'htmlbars'
   | 'http'
   | 'hy'

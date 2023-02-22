@@ -50,11 +50,9 @@ export default function PostDetailScreen({navigation, route}: any) {
 
   const setOptions = (): void => {
     let title = data?.LANG_NM ? data?.LANG_NM?.toUpperCase() : '-';
-    if (title?.length > 15) title = title?.slice(0, 15) + '..';
 
     navigation.setOptions({
       title,
-      headerBackTitle: '<<',
       headerRight: () => (
         <SaveButton onPress={data?.IS_BOOK ? deleteBook : addBook}>
           <Icon name={data?.IS_BOOK ? 'star' : 'staro'} />

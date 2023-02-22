@@ -1,10 +1,6 @@
 #import "AppDelegate.h"
 
-#import <Firebase.h>
-#import <FirebaseCore.h>
-#import <FirebaseMessaging.h>
-
-//#import <RNKakaoLogins.h>
+#import <RNKakaoLogins.h>
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -15,12 +11,19 @@
   self.moduleName = @"coteacher";
   self.initialProps = @{};
 
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (BOOL)application:(UIApplication *)application
+  openURL:(NSURL *)url
+  options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  
+  // kakao
+  if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+    return [RNKakaoLogins handleOpenUrl: url];
+  }
+
+  return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

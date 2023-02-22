@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">코북</string>
+    <string name="kakao_app_key">bd990ecfaf454fef2d108c70cc09b63e</string>
 </resources>

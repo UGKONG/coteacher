@@ -4,5 +4,5 @@ export type Dispatch = {
 };
 
 export type Store = {
-  uuid: string;
+  user: null | User;
 };

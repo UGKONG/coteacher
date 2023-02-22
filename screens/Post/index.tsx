@@ -41,7 +41,7 @@ export default function PostScreen({navigation, route}: any) {
       {isLoad ? (
         <Loading />
       ) : !list?.length ? (
-        <NoneItem text="저장된 기술이 없습니다." />
+        <NoneItem text="저장된 항목이 없습니다." />
       ) : (
         list?.map(item => (
           <Item

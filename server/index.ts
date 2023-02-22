@@ -6,6 +6,7 @@ import testRoute from './routes/test';
 import languageRoute from './routes/language';
 import postRoute from './routes/post';
 import bookRoute from './routes/bookmark';
+import loginRoute from './routes/login';
 
 dotenv.config();
 
@@ -21,5 +22,6 @@ app.use('/api/test', testRoute);
 app.use('/api/language', languageRoute);
 app.use('/api/post', postRoute);
 app.use('/api/book', bookRoute);
+app.use('/api/login', loginRoute);
 
 app.listen(port, () => console.log('React Native Server Started.'));

@@ -3,7 +3,7 @@ import {Dispatch, Store} from './index.type';
 
 // Store Current State
 const currentState: Store = {
-  uuid: '',
+  user: null,
 };
 
 // Store Reducer

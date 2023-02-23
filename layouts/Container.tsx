@@ -23,11 +23,7 @@ const Scroll = (props: any): JSX.Element => {
 };
 
 const View = (props: any): JSX.Element => {
-  return (
-    <ViewContainer {...props}>
-      <Contents>{props?.children}</Contents>
-    </ViewContainer>
-  );
+  return <ViewContainer {...props}>{props?.children}</ViewContainer>;
 };
 
 const ScrollContainer = styled.ScrollView`
@@ -41,12 +37,7 @@ const ViewContainer = styled.SafeAreaView`
   width: 100%;
   height: 100%;
   background-color: #fff;
-`;
-const Contents = styled.View`
-  width: 100%;
-  height: 100%;
-  align-items: center;
   justify-content: flex-start;
-  position: relative;
+  align-items: center;
 `;
 export default {Scroll, View};

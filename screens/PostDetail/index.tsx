@@ -8,6 +8,7 @@ import {useIsFocused} from '@react-navigation/native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {Dimensions} from 'react-native';
 import {Languages} from '@rivascva/react-native-code-editor/lib/typescript/languages';
+import {colors} from '../../public/strings';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('screen');
 
@@ -26,18 +27,14 @@ export default function PostDetailScreen({navigation, route}: any) {
     if (!POST_SQ) return setData(undefined);
     http
       .get('/post/' + POST_SQ + '?USER_SQ=1')
-      .then(({data}) => {
-        if (!data?.result) return setData(undefined);
-        setData(data?.current);
-      })
+      .then(({data}) => setData(data?.result ? data?.current : undefined))
       .catch(() => setData(undefined));
   };
 
   const addBook = (): void => {
     const form = {USER_SQ: 1, POST_SQ: data?.POST_SQ};
     http.post('/book', form).then(({data}) => {
-      if (!data?.result) return;
-      getData();
+      if (data?.result) getData();
     });
   };
 
@@ -50,7 +47,6 @@ export default function PostDetailScreen({navigation, route}: any) {
 
   const setOptions = (): void => {
     let title = data?.LANG_NM ? data?.LANG_NM?.toUpperCase() : '-';
-
     navigation.setOptions({
       title,
       headerRight: () => (
@@ -61,7 +57,7 @@ export default function PostDetailScreen({navigation, route}: any) {
     });
   };
 
-  useEffect(setOptions, [data]);
+  useEffect(setOptions, [data?.IS_BOOK]);
   useEffect(getData, [POST_SQ, isFocus]);
 
   return (
@@ -100,9 +96,10 @@ const Title = styled(Text)`
   font-weight: 700;
 `;
 const Contents = styled(Text)`
-  font-size: 14px;
+  font-size: 15px;
   min-height: 150px;
   margin-bottom: 50px;
+  line-height: 30px;
 `;
 const SaveButton = styled.TouchableOpacity.attrs(() => ({
   activeOpacity: 0.7,

@@ -1,11 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import {useMemo, useState} from 'react';
 import styled from 'styled-components/native';
+import {useLastTime} from '../functions/utils';
 
 type Props = {
   title: string;
   line?: number;
-  titleComponent?: () => JSX.Element;
+  titleComponent?: () => JSX.Element | null;
+  time?: Date;
   itemClick: () => void;
   itemLongClick?: () => void;
 };
@@ -14,6 +16,7 @@ export default function Item({
   title,
   line = 1,
   titleComponent: TitleComponent,
+  time,
   itemClick,
   itemLongClick,
 }: Props) {
@@ -40,6 +43,7 @@ export default function Item({
             />
           )}
         </Contents>
+        {time ? <TimeView>{useLastTime(time)}</TimeView> : null}
       </Wrap>
     </Container>
   );
@@ -51,6 +55,7 @@ const Container = styled.TouchableHighlight.attrs(() => ({
 }))`
   border-bottom-color: #eee;
   border-bottom-width: 1px;
+  min-height: 45px;
 `;
 const Wrap = styled.View`
   flex: 1;
@@ -68,8 +73,10 @@ const Name = styled.Text`
   color: #343434;
 `;
 const imgStyle = `
-  width: 30px;
-  height: 30px;
+  min-width: 30px;
+  max-width: 30px;
+  min-height: 30px;
+  max-height: 30px;
   border-radius: 3px;
   overflow: hidden;
   opacity: 0.8;
@@ -81,4 +88,10 @@ const Image = styled.Image.attrs(() => ({
 `;
 const NoneImage = styled.View`
   ${imgStyle}
+`;
+const TimeView = styled.Text`
+  font-size: 10px;
+  color: #999999;
+  text-align: right;
+  margin-top: 5px;
 `;

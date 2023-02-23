@@ -1,6 +1,7 @@
 declare type Post = {
   POST_SQ: number;
   LANG_SQ: number;
+  POST_FRAMEWORK_NM: string;
   POST_TTL: string;
   POST_CN: string;
   POST_CD: string;

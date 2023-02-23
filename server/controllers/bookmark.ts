@@ -1,11 +1,12 @@
 import {Request, Response} from 'express';
-import {fail, success, useDatabase} from '../../functions/utils';
+import SQL from '../../functions/sql';
+import {fail, success} from '../../functions/utils';
 
 // 북마크 리스트 조회
 export const getBooks = async (req: Request, res: Response) => {
   const USER_SQ = req?.query?.USER_SQ ?? req?.body?.USER_SQ;
 
-  const {error, result} = await useDatabase(
+  const {error, result} = await SQL(
     `
     SELECT
     a.BOOK_SQ, a.USER_SQ, a.POST_SQ, a.BOOK_CRT_DT,
@@ -27,23 +28,30 @@ export const getBooks = async (req: Request, res: Response) => {
   res.send(success(result));
 };
 
-// 북마크 삭제
+// 북마크 추가
 export const postBook = async (req: Request, res: Response) => {
   const USER_SQ = req?.query?.USER_SQ ?? req?.body?.USER_SQ;
   const POST_SQ = req?.query?.POST_SQ ?? req?.body?.POST_SQ;
 
-  const {error} = await useDatabase(
+  const {error: selectError, result: selectResult} = await SQL(
     `
-    INSERT INTO tb_bookmark (
-      USER_SQ, POST_SQ
-    ) VALUES (
-      ?, ?
-    );
+    SELECT BOOK_SQ FROM tb_bookmark
+    WHERE USER_SQ = ? AND POST_SQ = ? LIMIT 1;
   `,
     [USER_SQ, POST_SQ],
   );
 
-  if (error) return res.send(fail());
+  if (selectError) return res.send(fail());
+  if (selectResult[0]) return res.send(success());
+
+  const {error: insertError} = await SQL(
+    `
+    INSERT INTO tb_bookmark (USER_SQ, POST_SQ) VALUES (?, ?);
+  `,
+    [USER_SQ, POST_SQ],
+  );
+
+  if (insertError) return res.send(fail());
   res.send(success());
 };
 
@@ -51,7 +59,7 @@ export const postBook = async (req: Request, res: Response) => {
 export const deleteBook = async (req: Request, res: Response) => {
   const BOOK_SQ = req?.params?.BOOK_SQ;
 
-  const {error} = await useDatabase(
+  const {error} = await SQL(
     `
     DELETE FROM tb_bookmark
     WHERE BOOK_SQ = ?;

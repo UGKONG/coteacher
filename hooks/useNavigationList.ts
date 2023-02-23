@@ -11,7 +11,7 @@ type Memo = {
   component: (props: any) => JSX.Element;
 };
 
-export default function useNavigation() {
+export default function useNavigationList() {
   const memo = useMemo<Memo[]>(
     () => [
       {
@@ -32,7 +32,7 @@ export default function useNavigation() {
         id: 3,
         name: 'Setting',
         title: '설정',
-        icon: {default: 'ios-construct-outline', focus: 'ios-construct'},
+        icon: {default: 'settings-outline', focus: 'settings-sharp'},
         component: SettingStack,
       },
     ],

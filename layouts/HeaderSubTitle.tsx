@@ -1,12 +1,13 @@
 import styled from 'styled-components/native';
+import {colors} from '../public/strings';
 
 type Props = {text: string};
 
 export default function HeaderSubTitle({text = ''}: Props) {
-  return <Text>{text}</Text>;
+  return <Text color={text}>{text}</Text>;
 }
 
-const Text = styled.Text`
+const Text = styled.Text<{color: string}>`
   font-size: 12px;
-  color: #555555;
+  color: ${x => colors[x?.color?.toLocaleLowerCase()] ?? '#555555'};
 `;

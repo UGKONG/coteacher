@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <RNKakaoLogins.h>
+#import <NaverThirdPartyLogin/NaverThirdPartyLoginConnection.h>
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -21,6 +22,11 @@
   // kakao
   if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
     return [RNKakaoLogins handleOpenUrl: url];
+  }
+
+  // naver
+  if ([url.scheme isEqualToString:@"coteacher"]) {
+    return [[NaverThirdPartyLoginConnection getSharedInstance] application:application openURL:url options:options];
   }
 
   return YES;

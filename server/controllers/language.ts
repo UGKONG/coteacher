@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
-import {fail, success, useDatabase} from '../../functions/utils';
+import SQL from '../../functions/sql';
+import {fail, success} from '../../functions/utils';
 
 export const getLanguages = async (req: Request, res: Response) => {
-  const {error, result} = await useDatabase(`
+  const {error, result} = await SQL(`
     SELECT * FROM tb_language ORDER BY LANG_NM;
   `);
 

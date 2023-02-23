@@ -1,6 +1,11 @@
-import {createConnection} from 'mysql';
 import axios from 'axios';
-import {hangulIncludes, josa} from '@toss/hangul';
+import {
+  hangulIncludes,
+  josa,
+  chosungIncludes,
+  disassembleHangul,
+} from '@toss/hangul';
+import {getDateDistance} from '@toss/date';
 import {isEmail, isMobilePhone, isRRN} from '@toss/validators';
 import {
   formatBusinessRegistrationNumber,
@@ -60,23 +65,65 @@ export interface FailResponseData {
 export interface AxiosResponse {
   data: SuccessResponseData | FailResponseData;
 }
-export interface ConnectionConfig {
-  host: string;
-  user: string;
-  password: string;
-  database: string;
-  dateStrings: boolean;
-  multipleStatements: boolean;
-}
-export interface ConnectionReturn {
-  error: Error | null;
-  result: any;
-  sql: string;
-}
 export interface dateTimeFormat {
   date: '-' | '/' | '.';
   time: ':' | '.' | '/';
 }
+
+const keyPositions = {
+  ㅂ: 'q',
+  ㅈ: 'w',
+  ㄷ: 'e',
+  ㄱ: 'r',
+  ㅅ: 't',
+  ㅛ: 'y',
+  ㅕ: 'u',
+  ㅑ: 'i',
+  ㅐ: 'o',
+  ㅔ: 'p',
+  ㅁ: 'a',
+  ㄴ: 's',
+  ㅇ: 'd',
+  ㄹ: 'f',
+  ㅎ: 'g',
+  ㅗ: 'h',
+  ㅓ: 'j',
+  ㅏ: 'k',
+  ㅣ: 'l',
+  ㅋ: 'z',
+  ㅌ: 'x',
+  ㅊ: 'c',
+  ㅍ: 'v',
+  ㅠ: 'b',
+  ㅜ: 'n',
+  ㅡ: 'm',
+  q: 'ㅂ',
+  w: 'ㅈ',
+  e: 'ㄷ',
+  r: 'ㄱ',
+  t: 'ㅅ',
+  y: 'ㅛ',
+  u: 'ㅕ',
+  i: 'ㅑ',
+  o: 'ㅐ',
+  p: 'ㅔ',
+  a: 'ㅁ',
+  s: 'ㄴ',
+  d: 'ㅇ',
+  f: 'ㄹ',
+  g: 'ㅎ',
+  h: 'ㅗ',
+  j: 'ㅓ',
+  k: 'ㅏ',
+  l: 'ㅣ',
+  z: 'ㅋ',
+  x: 'ㅌ',
+  c: 'ㅊ',
+  v: 'ㅍ',
+  b: 'ㅠ',
+  n: 'ㅜ',
+  m: 'ㅡ',
+};
 
 /**
  * @example
@@ -310,45 +357,6 @@ export const useIsInArray = (
 ): boolean => {
   let result: boolean = arrayIncludes(array, item);
   return result;
-};
-
-/**
- * @example
- * const { error, result, sql } = await useDatabase(`
- *   SELECT * FROM 테이블명
- *   WHERE USER_ID = ? AND USER_PW = ?;
- * `, ['USER_ID', 'USER_PW']);
- */
-export const useDatabase = (
-  sql: string,
-  sqlParams?: Array<string | number>,
-): Promise<ConnectionReturn> => {
-  const config: ConnectionConfig = {
-    host: process.env.DB_HOST as string,
-    user: process.env.DB_USER as string,
-    password: process.env.DB_PASSWORD as string,
-    database: process.env.DB_DATABASE as string,
-    dateStrings: true,
-    multipleStatements: true,
-  };
-
-  const db = createConnection(config);
-
-  let sqlString = sql;
-
-  if (sqlParams) {
-    sqlParams?.forEach(param => {
-      sqlString = sqlString.replace('?', String(param));
-    });
-  }
-
-  return new Promise(success => {
-    db.query(sql, sqlParams ?? [], (error: Error | null, result: any) => {
-      db.end();
-      if (error) console.log(error);
-      success({error, result, sql: sqlString});
-    });
-  });
 };
 
 /**
@@ -617,9 +625,29 @@ export const useRandomArray = (array: Array<any>): Array<any> => {
  * useRandomChoiceArray([]);
  * // undefined
  */
-export const useRandomChoiceArray = (array: Array<any>): any => {
+export const useRandomChoiceArray = (array: any[]): any => {
   let result: any = sample(array);
 
+  return result;
+};
+
+/**
+ * @example
+ * useRandomNumber(2);
+ * // '32'
+ * useRandomNumber(3);
+ * // '261'
+ * useRandomNumber(4);
+ * // '9423'
+ * useRandomNumber(5);
+ * // '22744'
+ */
+export const useRandomNumber = (num: number): string => {
+  let result = '';
+  for (let i = 0; i < num; i++) {
+    let n = Math.random() * 10;
+    result += String(n);
+  }
   return result;
 };
 
@@ -708,7 +736,18 @@ export const useSearchHangul = (
   current: string,
   searchText?: string,
 ): boolean => {
-  return hangulIncludes(current, searchText ?? '');
+  let _current = current?.toLocaleLowerCase()?.replace(/ /g, '');
+  let _searchText = (searchText ?? '')?.replace(/ /g, '');
+
+  let bool1 = hangulIncludes(_current, _searchText);
+  let bool2 = chosungIncludes(_current, _searchText);
+
+  let txtArr: string[] = disassembleHangul(_searchText)?.split('');
+  txtArr = txtArr?.map(x => keyPositions[x as keyof typeof keyPositions] ?? '');
+  let join = txtArr?.join('');
+  let bool3 = hangulIncludes(_current, join || _searchText);
+
+  return bool1 || bool2 || bool3;
 };
 
 /**
@@ -810,15 +849,48 @@ export const useIsNumber = (input: UseIsNumberProps): boolean => {
   return true;
 };
 
-export const useFileSize = (size: number | null | undefined): string => {
+/**
+ * @example
+ * useFileSize(244262);
+ * // 238KB
+ * useFileSize(12637356);
+ * // 12MB
+ * useFileSize(43737827845);
+ * // 40GB
+ * useFileSize(346347486545);
+ * // 322GB
+ */
+export const useFileSize = (size?: number | null): string => {
   const units = ['KB', 'MB', 'GB', 'TB'];
   if (!size) return '0KB';
 
   for (let i = 0; i < units.length; i++) {
     size = Math.floor(size / 1024);
-
-    if (size < 1024) return size.toFixed(1) + units[i];
+    if (size < 1024) {
+      let fix = size.toFixed(1);
+      if (fix?.slice(-2) === '.0') fix = fix?.slice(0, -2);
+      return fix + units[i];
+    }
   }
-
   return '0KB';
+};
+
+/**
+ * @example
+ * useLastTime(new Date('2023-01-01'));
+ * // 4일전
+ * useLastTime(new Date('2023-01-04'));
+ * // 1일전
+ * useLastTime(new Date('2023-01-05 12:30:43'));
+ * // 4분전
+ * useLastTime(new Date('2023-01-05 12:34:43'));
+ * // 53초전
+ */
+export const useLastTime = (date: Date): string => {
+  let test = getDateDistance(date, new Date());
+  if (test?.days) return test?.days + '일전';
+  if (test?.hours) return test?.hours + '시간전';
+  if (test?.minutes) return test?.minutes + '분전';
+  if (test?.seconds) return test?.seconds + '초전';
+  return '';
 };

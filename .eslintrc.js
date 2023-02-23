@@ -10,6 +10,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     'react/no-unstable-nested-components': 'off',
     'react-native/no-inline-styles': 'off',
+    'no-unreachable': 'off',
     curly: 'off',
   },
 };

@@ -3,12 +3,11 @@ import {useEffect, useMemo, useState} from 'react';
 import http from '../../functions/http';
 import styled from 'styled-components/native';
 import Editor from '../../layouts/Editor';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {Dimensions} from 'react-native';
 import {Languages} from '@rivascva/react-native-code-editor/lib/typescript/languages';
-import {colors} from '../../public/strings';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('screen');
 
@@ -51,7 +50,9 @@ export default function PostDetailScreen({navigation, route}: any) {
       title,
       headerRight: () => (
         <SaveButton onPress={data?.IS_BOOK ? deleteBook : addBook}>
-          <Icon name={data?.IS_BOOK ? 'star' : 'staro'} />
+          <BookmarkIcon
+            name={data?.IS_BOOK ? 'bookmark' : 'bookmark-outline'}
+          />
         </SaveButton>
       ),
     });
@@ -104,7 +105,7 @@ const Contents = styled(Text)`
 const SaveButton = styled.TouchableOpacity.attrs(() => ({
   activeOpacity: 0.7,
 }))``;
-const Icon = styled(AntDesign)`
-  font-size: 20px;
+const BookmarkIcon = styled(Icon)`
+  font-size: 22px;
   color: #00ada9;
 `;

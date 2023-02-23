@@ -27,7 +27,7 @@ export default function Navigation() {
                   <Icon
                     name={focused ? item?.icon?.focus : item?.icon?.default}
                     color={focused ? '#00ada9' : '#bbbbbb'}
-                    size={25}
+                    size={item?.icon?.size}
                   />
                 );
               },

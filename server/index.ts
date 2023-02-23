@@ -8,6 +8,7 @@ import postRoute from './routes/post';
 import bookRoute from './routes/bookmark';
 import loginRoute from './routes/login';
 import userRoute from './routes/user';
+import boardRoute from './routes/board';
 
 dotenv.config();
 
@@ -25,5 +26,6 @@ app.use('/api/post', postRoute);
 app.use('/api/book', bookRoute);
 app.use('/api/login', loginRoute);
 app.use('/api/user', userRoute);
+app.use('/api/board', boardRoute);
 
 app.listen(port, () => console.log('React Native Server Started.'));

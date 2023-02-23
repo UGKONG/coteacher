@@ -645,7 +645,7 @@ export const useRandomChoiceArray = (array: any[]): any => {
 export const useRandomNumber = (num: number): string => {
   let result = '';
   for (let i = 0; i < num; i++) {
-    let n = Math.random() * 10;
+    let n = Math.round(Math.random() * 10);
     result += String(n);
   }
   return result;

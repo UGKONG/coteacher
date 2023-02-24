@@ -11,12 +11,14 @@ import userRoute from './routes/user';
 import boardRoute from './routes/board';
 import commentRoute from './routes/comment';
 import apiLog from './middlewares/apiLog';
+import terms from '../public/terms';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.get('/terms', (req, res) => res.send(terms));
 app.use(cors());
 app.use(bodyParser.json());
 

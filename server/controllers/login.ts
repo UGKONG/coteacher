@@ -42,7 +42,7 @@ export const postLogin = async (req: Request, res: Response) => {
     );
 
     if (updateError) return res.send(fail());
-    res.send(success(user));
+    return res.send(success(user));
   } else {
     const {error: insertError, result: insertResult} = await SQL(
       `
@@ -70,6 +70,6 @@ export const postLogin = async (req: Request, res: Response) => {
     if (insertError) return res.send(fail());
 
     user = insertResult[2][0];
-    res.send(success(user));
+    return res.send(success(user));
   }
 };

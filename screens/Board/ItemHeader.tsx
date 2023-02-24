@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {Dispatch, SetStateAction, useMemo, useState} from 'react';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useLastTime} from '../../functions/utils';
@@ -9,9 +9,16 @@ type Props = {
   name: string;
   date: string;
   size?: Size;
+  setImgView?: Dispatch<SetStateAction<string | null>>;
 };
 
-export default function ItemHeader({img, name, date, size = 'small'}: Props) {
+export default function ItemHeader({
+  img,
+  name,
+  date,
+  size = 'small',
+  setImgView,
+}: Props) {
   const [isImgErr, setIsImgErr] = useState<boolean>(false);
 
   const isImage = useMemo<boolean>(() => {
@@ -21,6 +28,7 @@ export default function ItemHeader({img, name, date, size = 'small'}: Props) {
 
   const imgPress = (): void => {
     if (!isImage) return;
+    if (setImgView) setImgView(img);
   };
 
   return (

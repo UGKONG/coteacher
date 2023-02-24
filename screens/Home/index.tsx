@@ -32,7 +32,7 @@ export default function HomeScreen({navigation}: any) {
     http
       .get('/language')
       .then(({data}) => setList(data?.result ? data?.current : []))
-      .catch(() => setList([]))
+      .catch(() => {})
       .finally(() => setIsLoad(false));
   };
 

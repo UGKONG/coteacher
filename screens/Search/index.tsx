@@ -38,7 +38,7 @@ export default function SearchScreen({navigation}: any) {
     http
       .get('/post')
       .then(({data}) => setList(data?.result ? data?.current : []))
-      .catch(() => setList([]))
+      .catch(() => {})
       .finally(() => setIsLoad(false));
   };
 

@@ -37,7 +37,7 @@ export default function PostScreen({navigation, route}: any) {
     http
       .get('/post?LANG_SQ=' + LANG_SQ)
       .then(({data}) => setList(data?.result ? data?.current : []))
-      .catch(() => setList([]))
+      .catch(() => {})
       .finally(() => setIsLoad(false));
   };
 

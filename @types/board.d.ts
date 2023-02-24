@@ -20,3 +20,8 @@ declare type Board = {
   BD_MOD_DT: string;
   BD_CRT_DT: string;
 };
+declare type CreateBoard = {
+  BD_CN: string;
+  BD_TAG: string;
+  USER_SQ: number;
+};

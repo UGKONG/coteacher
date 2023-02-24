@@ -8,21 +8,33 @@ import CodeEditor, {
 import Feather from 'react-native-vector-icons/Feather';
 import {Languages} from '@rivascva/react-native-code-editor/lib/typescript/languages';
 
-type Props = {value?: string; lang?: Languages};
+type Props = {
+  value?: string;
+  lang?: Languages;
+  readOnly?: boolean;
+  defaultHeight?: number;
+};
 type IconName = 'copy' | 'check';
 
 const {width, height} = Dimensions.get('screen');
 
-export default function Editor({value = '', lang = 'javascript'}: Props) {
+export default function Editor({
+  value = '',
+  lang = 'javascript',
+  readOnly = true,
+  defaultHeight,
+}: Props) {
   const [iconName, setIconName] = useState<IconName>('copy');
+  const [code, setCode] = useState<string>(value);
 
   const EditorHeight = useMemo<number>(() => {
+    if (defaultHeight) return defaultHeight;
     return height / 2 - 100;
-  }, [height]);
+  }, [height, defaultHeight]);
 
   const copy = (): void => {
     if (iconName === 'check') return;
-    Clipboard.setString(value);
+    Clipboard.setString(code);
     setIconName('check');
   };
 
@@ -46,8 +58,9 @@ export default function Editor({value = '', lang = 'javascript'}: Props) {
         language={lang}
         syntaxStyle={CodeEditorSyntaxStyles.atomOneDark}
         showLineNumbers
-        readOnly
-        initialValue={value}
+        readOnly={readOnly}
+        initialValue={code}
+        onChange={setCode}
       />
       <CopyBtn onPress={copy}>
         <CopyIcon name={iconName} />

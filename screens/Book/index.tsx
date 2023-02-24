@@ -39,7 +39,7 @@ export default function BookScreen({navigation}: any) {
     http
       .get('/book?USER_SQ=1')
       .then(({data}) => setList(data?.result ? data?.current : []))
-      .catch(() => setList([]))
+      .catch(() => {})
       .finally(() => setIsLoad(false));
   };
 

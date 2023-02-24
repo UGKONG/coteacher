@@ -31,6 +31,7 @@ const ScrollContainer = styled.ScrollView`
   flex: 1;
   position: relative;
   background-color: #fff;
+  padding-bottom: 100px;
 `;
 const ViewContainer = styled.SafeAreaView`
   position: relative;

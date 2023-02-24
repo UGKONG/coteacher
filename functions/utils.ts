@@ -60,7 +60,7 @@ export interface FailResponseData {
   now: string;
   result: boolean;
   current: null;
-  message: string;
+  message: string | Error;
 }
 export interface AxiosResponse {
   data: SuccessResponseData | FailResponseData;
@@ -133,7 +133,7 @@ const keyPositions = {
  * message: "에러입니다."
  * current: null
  */
-export const fail = (message: string = 'Error'): FailResponseData => {
+export const fail = (message: string | Error = 'Error'): FailResponseData => {
   console.log(message);
   return {
     now: useDate(),

@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import ItemBottom from './ItemBottom';
 import ItemHeader from './ItemHeader';
 import ItemTag from './ItemTag';
 
@@ -26,13 +26,9 @@ export default function Item({data}: Props) {
           date={data?.BD_CRT_DT}
         />
         <Contents>{data?.BD_CN}</Contents>
+        <MoreBtn>더보기</MoreBtn>
         <ItemTag tag={data?.BD_TAG} />
-        <Bottom>
-          <EyeIcon />
-          <BottomText>{data?.BD_VIEW_CNT ?? 0}</BottomText>
-          <CommentIcon />
-          <BottomText>{data?.BD_CMT_CNT ?? 0}</BottomText>
-        </Bottom>
+        <ItemBottom view={data?.BD_VIEW_CNT} comment={data?.BD_CMT_CNT} />
         <Margin />
       </View>
     </Container>
@@ -49,36 +45,16 @@ const Contents = styled.Text.attrs(() => ({
   font-size: 14px;
   line-height: 18px;
   color: #232323;
+`;
+const MoreBtn = styled.Text`
+  font-size: 14px;
+  color: #aaa;
+  padding: 0 14px;
+  margin-top: 4px;
   margin-bottom: 15px;
 `;
 const Margin = styled.View`
   height: 12px;
   margin-top: 10px;
   background-color: #f0f0f0;
-`;
-const Bottom = styled.View`
-  flex-direction: row;
-  padding: 0 14px;
-  align-items: center;
-`;
-const iconStyle = `
-  color: #aaa;
-  font-size: 20px;
-  margin-right: 5px;
-`;
-const CommentIcon = styled(Icon).attrs(() => ({
-  name: 'chatbubble-ellipses-outline',
-}))`
-  ${iconStyle}
-`;
-const EyeIcon = styled(Icon).attrs(() => ({
-  name: 'eye-outline',
-}))`
-  ${iconStyle}
-  font-size: 22px;
-`;
-const BottomText = styled.Text`
-  margin-right: 20px;
-  font-size: 12px;
-  color: #aaa;
 `;

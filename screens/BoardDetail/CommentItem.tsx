@@ -2,12 +2,16 @@ import {useMemo, useState} from 'react';
 import styled from 'styled-components/native';
 import {useLastTime} from '../../functions/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Alert, AlertButton} from 'react-native';
+import http from '../../functions/http';
+import {errorMessage} from '../../public/strings';
+import {useSelector} from 'react-redux';
+import {Store} from '../../store/index.type';
 
-type Props = {
-  data: BoardComment;
-};
+type Props = {data: BoardComment; getData: () => void};
 
-export default function CommentItem({data}: Props) {
+export default function CommentItem({data, getData}: Props) {
+  const user = useSelector((x: Store) => x?.user);
   const [isImgErr, setIsImgErr] = useState<boolean>(false);
 
   const isImage = useMemo<boolean>(() => {
@@ -15,36 +19,59 @@ export default function CommentItem({data}: Props) {
     return true;
   }, [isImgErr, data?.USER_IMG]);
 
-  const imgPress = (): void => {
-    if (!isImage) return;
+  const deleteComment = (): void => {
+    if (data?.USER_SQ !== user?.USER_SQ) return;
+
+    let doit = (): void => {
+      http.delete('/comment/' + data?.CMT_SQ).then(({data}) => {
+        if (!data?.result) return Alert.alert('오류', errorMessage);
+        getData();
+      });
+    };
+    let buttons: AlertButton[] = [
+      {text: '예', style: 'destructive', onPress: doit},
+      {text: '아니요'},
+    ];
+    Alert.alert('댓글 삭제', '해당 댓글을 삭제하시겠습니까?', buttons);
   };
 
   return (
-    <Container>
-      <Profile activeOpacity={isImage ? 0.7 : 1} onPress={imgPress}>
-        {isImage ? (
-          <Image
-            source={{uri: data?.USER_IMG}}
-            onError={() => setIsImgErr(true)}
-          />
-        ) : (
-          <NoneImage styled={imgStyle}>
-            <PersonIcon />
-          </NoneImage>
-        )}
-      </Profile>
-      <TextContainer>
-        <Time>{useLastTime(new Date(data?.CMT_CRT_DT))}</Time>
-        <Contents>{data?.CMT_CN}</Contents>
-      </TextContainer>
+    <Container onLongPress={deleteComment}>
+      <Wrap>
+        <Profile>
+          {isImage ? (
+            <Image
+              source={{uri: data?.USER_IMG}}
+              onError={() => setIsImgErr(true)}
+            />
+          ) : (
+            <NoneImage styled={imgStyle}>
+              <PersonIcon />
+            </NoneImage>
+          )}
+        </Profile>
+        <TextContainer>
+          <Name>{data?.USER_NM ?? '이름없음'}</Name>
+          <Time>{useLastTime(new Date(data?.CMT_CRT_DT)) || '방금전'}</Time>
+          <Contents>{data?.CMT_CN}</Contents>
+        </TextContainer>
+      </Wrap>
     </Container>
   );
 }
 
-const Container = styled.View`
-  padding: 6px 14px;
-  margin-bottom: 20px;
+const Container = styled.TouchableHighlight.attrs(() => ({
+  activeOpacity: 0.8,
+  underlayColor: '#f1f1f1',
+}))`
+  padding: 16px 14px 6px;
+  border-bottom-width: 1px;
+  border-bottom-color: #eee;
+  min-height: 80px;
+`;
+const Wrap = styled.View`
   flex-direction: row;
+  flex: 1;
 `;
 const Contents = styled.Text`
   margin-bottom: 5px;
@@ -52,10 +79,15 @@ const Contents = styled.Text`
   font-size: 14px;
   line-height: 22px;
 `;
+const Name = styled.Text`
+  font-size: 13px;
+  font-weight: 700;
+  color: #343434;
+`;
 const Time = styled.Text`
   font-size: 10px;
   color: #555555;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 const imgStyle = `
   width: 44px;
@@ -64,7 +96,7 @@ const imgStyle = `
   border: 1px solid #f2f2f2;
   overflow: hidden;
 `;
-const Profile = styled.TouchableOpacity`
+const Profile = styled.View`
   ${imgStyle}
   margin-right: 14px;
 `;
@@ -78,12 +110,15 @@ const NoneImage = styled.View<{styled: string}>`
   ${x => x?.styled}
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: flex-end;
 `;
 const PersonIcon = styled(Icon).attrs(() => ({
   name: 'person',
 }))`
   color: #999999;
-  font-size: 28px;
+  font-size: 38px;
+  margin-bottom: -5px;
 `;
 const TextContainer = styled.View`
   flex: 1;

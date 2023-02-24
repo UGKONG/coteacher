@@ -61,7 +61,8 @@ export default function LoginScreen() {
         dispatch({type: 'user', payload: data?.current});
 
         if (isAuto) {
-          AsyncStorage.setItem('user', JSON.stringify(data?.current));
+          let str = JSON.stringify(data?.current);
+          AsyncStorage.setItem('user', str);
         }
       })
       .catch(errorCallback);
@@ -108,7 +109,7 @@ export default function LoginScreen() {
     AsyncStorage.getItem('user').then(value => {
       if (!value) return;
       let json: User = JSON.parse(value);
-      let id = json?.USER_SQ ?? null;
+      let id = json?.USER_SNS_SQ ?? null;
       let name = json?.USER_NM ?? null;
       let img = json?.USER_IMG ?? null;
       let platform = json?.USER_SNS_NM ?? null;

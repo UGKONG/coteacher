@@ -7,10 +7,9 @@ type Props = {
 
 export default function ItemTag({tag}: Props) {
   const tags = useMemo<string[]>(() => {
-    let replace = tag?.replace(/ /g, '');
-    if (!replace) return [];
-    if (replace?.indexOf(',') === -1) return [replace];
-    let result = replace?.split(',');
+    if (!tag) return [];
+    if (tag?.indexOf(',') === -1) return [tag];
+    let result = tag?.split(',');
     result = result?.filter((x, i) => x !== '' && i < 5);
     return result;
   }, [tag]);

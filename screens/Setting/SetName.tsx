@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Alert, TextInput, View} from 'react-native';
+import {Alert, TextInput} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import http from '../../functions/http';
 import ButtonLoading from '../../layouts/ButtonLoading';

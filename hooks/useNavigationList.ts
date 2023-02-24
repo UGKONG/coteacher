@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
-import BoardStack from '../stacks/Board';
-import BookStack from '../stacks/Book';
 import HomeStack from '../stacks/Home';
+import BookStack from '../stacks/Book';
+import BoardStack from '../stacks/Board';
 import SettingStack from '../stacks/Setting';
 
 type Memo = {

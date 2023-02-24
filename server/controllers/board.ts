@@ -41,12 +41,39 @@ export const getBoard = async (req: Request, res: Response) => {
     LEFT JOIN tb_user b
       ON a.USER_SQ = b.USER_SQ
     WHERE a.BD_SQ = ?
-    ORDER BY CMT_SQ;
+    ORDER BY CMT_SQ DESC;
+
+    UPDATE tb_board SET
+    BD_VIEW_CNT = BD_VIEW_CNT + 1
+    WHERE BD_SQ = ?;
   `,
-    [BD_SQ],
+    [BD_SQ, BD_SQ],
   );
 
   if (error) return res.send(fail());
 
-  res.send(success(result));
+  res.send(success(result[0]));
+};
+
+export const postBoard = async (req: Request, res: Response) => {
+  const BD_CN = req?.query?.BD_CN ?? req?.body?.BD_CN;
+  const BD_TAG = req?.query?.BD_TAG ?? req?.body?.BD_TAG;
+  const USER_SQ = req?.query?.USER_SQ ?? req?.body?.USER_SQ;
+
+  if (!BD_CN || !USER_SQ) return res.send(fail());
+
+  const {error} = await SQL(
+    `
+    INSERT INTO tb_board (
+      BD_CN, BD_TAG, USER_SQ
+    ) VALUES (
+      ?, ?, ?
+    );
+  `,
+    [BD_CN, BD_TAG, USER_SQ],
+  );
+
+  if (error) return res.send(fail());
+
+  res.send(success());
 };

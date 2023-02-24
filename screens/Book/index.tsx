@@ -75,7 +75,7 @@ export default function BookScreen({navigation}: any) {
             line={3}
             titleComponent={() => (
               <TitleComponent color={item?.LANG_NM}>
-                <TitleText>{item?.LANG_NM?.toUpperCase()}</TitleText>
+                <TitleText>{item?.LANG_NM}</TitleText>
               </TitleComponent>
             )}
             itemClick={() => {

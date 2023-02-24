@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import _Container from '../../layouts/Container';
 import {currentTagList as _currentTagList} from '../../public/strings';
 
-const currentTagList = _currentTagList?.sort((a, b) => {
+const currentTagList = Object.keys(_currentTagList)?.sort((a, b) => {
   return a.toLocaleLowerCase() < b.toLocaleLowerCase() ? -1 : 1;
 });
 
@@ -21,8 +21,8 @@ export default function TagScreen({tagList, setTagString, close}: Props) {
     if (find) {
       arr = tagList?.filter(x => x !== name);
     } else {
-      if (tagList?.length >= 5) {
-        return Alert.alert('태그 선택', '태그는 5개 이하로 선택 가능합니다.');
+      if (tagList?.length >= 10) {
+        return Alert.alert('태그 선택', '태그는 10개 이하로 선택 가능합니다.');
       }
       arr = [...new Set([...tagList, name])];
     }
@@ -40,9 +40,10 @@ export default function TagScreen({tagList, setTagString, close}: Props) {
       <Header>
         <Title>태그 선택</Title>
         <CloseBtn onPress={close}>
-          <CloseBtnText>닫기</CloseBtnText>
+          <CloseBtnText>선택 완료</CloseBtnText>
         </CloseBtn>
       </Header>
+      <Description>10개 까지 선택 가능합니다.</Description>
       <List>
         <Wrpa>
           {currentTagList?.map(item => (
@@ -71,6 +72,13 @@ const Title = styled.Text`
   color: #343434;
   font-size: 20px;
   font-weight: 700;
+`;
+const Description = styled.Text`
+  color: #aaa;
+  font-size: 12px;
+  margin: 10px 0;
+  width: 100%;
+  padding: 0 14px;
 `;
 const CloseBtn = styled.TouchableOpacity`
   padding: 10px;

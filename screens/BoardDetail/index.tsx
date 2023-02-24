@@ -1,5 +1,5 @@
 import _Container from '../../layouts/Container';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import http from '../../functions/http';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -13,6 +13,11 @@ import ItemBottom from '../Board/ItemBottom';
 import CommentForm from './CommentForm';
 import ItemTag from '../Board/ItemTag';
 import Loading from '../../layouts/Loading';
+import HeaderIcon from 'react-native-vector-icons/SimpleLineIcons';
+import {Alert, AlertButton} from 'react-native';
+import {useSelector} from 'react-redux';
+import {Store} from '../../store/index.type';
+import {errorMessage} from '../../public/strings';
 
 export default function BoardDetailScreen({navigation, route}: any) {
   const isFocus = useIsFocused();
@@ -20,6 +25,11 @@ export default function BoardDetailScreen({navigation, route}: any) {
   const [list, setList] = useState<BoardComment[]>([]);
   const [isImgView, setImgView] = useState<string | null>(null);
   const [isLoad, setIsLoad] = useState<boolean>(true);
+  const user = useSelector((x: Store) => x?.user);
+
+  const isMyBoard = useMemo<boolean>(() => {
+    return data?.USER_SQ === user?.USER_SQ;
+  }, [data?.USER_SQ, user?.USER_SQ]);
 
   const init = (): void => {
     if (!data) navigation.navigate('BoardScreen');
@@ -34,7 +44,38 @@ export default function BoardDetailScreen({navigation, route}: any) {
       .finally(() => setIsLoad(false));
   };
 
+  const deleteAsk = (): void => {
+    let doit = (): void => {
+      http
+        .delete('/board/' + data?.BD_SQ)
+        .then(({data}) => {
+          if (!data?.result) return Alert.alert('오류', errorMessage);
+          Alert.alert('삭제 완료', '게시글이 삭제되었습니다.');
+          navigation.navigate('BoardScreen');
+        })
+        .catch(() => Alert.alert('오류', errorMessage));
+    };
+
+    let buttons: AlertButton[] = [
+      {text: '예', style: 'destructive', onPress: doit},
+      {text: '아니요'},
+    ];
+    Alert.alert('게시글 삭제', '해당 게시글을 삭제하시겠습니까?', buttons);
+  };
+
+  const setOptions = (): void => {
+    navigation.setOptions({
+      headerRight: () =>
+        isMyBoard ? (
+          <ModifyBtn onPress={deleteAsk}>
+            <DelIcon />
+          </ModifyBtn>
+        ) : null,
+    });
+  };
+
   useEffect(getData, [data?.BD_SQ, isFocus]);
+  useEffect(setOptions, [navigation, route, isMyBoard]);
   useEffect(init, []);
 
   return data ? (
@@ -58,6 +99,7 @@ export default function BoardDetailScreen({navigation, route}: any) {
           <CommentIcon />
           <CommentTitleText>댓글</CommentTitleText>
         </CommentTitle>
+
         <Line />
 
         <CommentForm id={data?.BD_SQ} getData={getData} />
@@ -117,4 +159,24 @@ const CommentTitleText = styled.Text`
   letter-spacing: 2px;
   font-size: 17px;
   font-weight: 700;
+`;
+const iconStyle = `
+  font-size: 20px;
+  color: #999;
+`;
+const ModifyBtn = styled.TouchableOpacity.attrs(() => ({
+  activeOpacity: 0.8,
+}))`
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  margin-right: -5px;
+`;
+const DelIcon = styled(HeaderIcon).attrs(() => ({
+  name: 'trash',
+}))`
+  ${iconStyle}
+  color: #ff4343;
 `;

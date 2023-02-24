@@ -77,3 +77,18 @@ export const postBoard = async (req: Request, res: Response) => {
 
   res.send(success());
 };
+
+export const deleteBoard = async (req: Request, res: Response) => {
+  const BD_SQ = req?.params?.BD_SQ;
+
+  const {error} = await SQL(
+    `
+    DELETE FROM tb_board WHERE BD_SQ = ?;
+  `,
+    [BD_SQ],
+  );
+
+  if (error) return res.send(fail());
+
+  res.send(success());
+};

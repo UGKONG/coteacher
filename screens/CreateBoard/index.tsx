@@ -28,7 +28,9 @@ export default function CreateBoardScreen({navigation, route}: any) {
     let str = value?.BD_TAG;
     if (!str) return [];
     if (str?.indexOf(',') === -1) return [str];
-    return str?.split(',');
+    let arr = str?.split(',');
+    arr = arr?.sort((a, b) => (a < b ? -1 : 1));
+    return arr;
   }, [value?.BD_TAG]);
 
   const changeValue = (key: keyof CreateBoard, val: string): void => {
@@ -47,6 +49,11 @@ export default function CreateBoardScreen({navigation, route}: any) {
       })
       .catch(() => Alert.alert('오류', errorMessage))
       .finally(() => setIsPending(false));
+  };
+
+  const tagDelete = (name: string) => {
+    let filter = tag?.filter(x => x !== name);
+    changeValue('BD_TAG', filter?.join(','));
   };
 
   const validate = (): void => {
@@ -87,7 +94,7 @@ export default function CreateBoardScreen({navigation, route}: any) {
             <ButtonText>태그 선택</ButtonText>
           </Button>
         </ButtonContainer>
-        <ItemTag tag={value?.BD_TAG} />
+        <ItemTag tag={value?.BD_TAG} itemPress={tagDelete} />
       </Container>
 
       {/* 태그 모달 */}
@@ -120,7 +127,6 @@ const Input = styled.TextInput.attrs(() => ({
   editable: true,
   multiline: true,
   maxLength: 1000,
-  autoFocus: true,
 }))`
   background-color: #f1f1f1;
   padding: 10px;

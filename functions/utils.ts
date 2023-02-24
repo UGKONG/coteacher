@@ -894,3 +894,31 @@ export const useLastTime = (date: Date): string => {
   if (test?.seconds) return test?.seconds + '초전';
   return '';
 };
+
+/**
+ * @example
+ * useRandomColor();
+ * // '#B19AC2'
+ * useRandomColor();
+ * // '#F06A59'
+ * useRandomColor();
+ * // '#558DEC'
+ * useRandomColor();
+ * // '#E49F59'
+ */
+export const useRandomColor = (): string => {
+  let col = [
+    '#47A1EB',
+    '#8383E0',
+    '#B19AC2',
+    '#7D80AE',
+    '#D07BA2',
+    '#F06A59',
+    '#13B374',
+    '#0E8779',
+    '#558DEC',
+    '#E49F59',
+  ];
+  let num = Math.floor(Math.random() * 10);
+  return col[num];
+};

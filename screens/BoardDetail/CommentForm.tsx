@@ -55,8 +55,8 @@ const Input = styled.TextInput.attrs(() => ({
   placeholder: '댓글을 작성해주세요.',
   maxLength: 100,
 }))`
-  min-height: 44px;
-  max-height: 100px;
+  min-height: 30px;
+  max-height: 200px;
   flex: 1;
   background-color: #f1f1f1;
   border-radius: 4px;
@@ -69,8 +69,8 @@ const Submit = styled.TouchableOpacity.attrs(() => ({
 }))`
   flex: 1;
   max-width: 44px;
-  min-height: 44px;
-  max-height: 100px;
+  min-height: 30px;
+  max-height: 200px;
   border-radius: 4px;
   margin-left: 5px;
   justify-content: center;

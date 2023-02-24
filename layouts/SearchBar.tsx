@@ -31,6 +31,7 @@ export default function SearchBar({
         placeholder={placeholder}
         onChangeText={setValue}
         autoFocus={focus}
+        keyboardType="default"
       />
       {isSort ? (
         <SortButton

@@ -1,4 +1,4 @@
-export const version = '1.0.4';
+export const version = '1.0.6';
 
 export const colors: {[key: string]: string} = {
   css: '#2E80BF',

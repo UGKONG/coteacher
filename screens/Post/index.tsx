@@ -50,6 +50,8 @@ export default function PostScreen({navigation, route}: any) {
   };
 
   const deleteItem = (POST_SQ: number): void => {
+    if (user?.USER_SQ !== 1) return;
+
     const buttons: AlertButton[] = [
       {
         text: '예',
@@ -116,15 +118,19 @@ export default function PostScreen({navigation, route}: any) {
         )}
       </Container.Scroll>
 
-      <CreateButton onPress={() => setIsCreate(true)} />
+      {user?.USER_SQ === 1 && (
+        <>
+          <CreateButton onPress={() => setIsCreate(true)} />
 
-      <Modal visible={isCreate} style="overFullScreen">
-        <CreatePostScreen
-          getList={getList}
-          lang={{sq: LANG_SQ, nm: LANG_NM}}
-          close={() => setIsCreate(false)}
-        />
-      </Modal>
+          <Modal visible={isCreate} style="overFullScreen">
+            <CreatePostScreen
+              getList={getList}
+              lang={{sq: LANG_SQ, nm: LANG_NM}}
+              close={() => setIsCreate(false)}
+            />
+          </Modal>
+        </>
+      )}
     </>
   );
 }

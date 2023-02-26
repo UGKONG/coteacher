@@ -495,7 +495,7 @@
 				CODE_SIGN_ENTITLEMENTS = coteacher/coteacher.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 5UNMY7T7GC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = coteacher/Info.plist;
@@ -535,7 +535,7 @@
 				CODE_SIGN_ENTITLEMENTS = coteacher/coteacher.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 5UNMY7T7GC;
 				INFOPLIST_FILE = coteacher/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "코북";

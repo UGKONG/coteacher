@@ -54,3 +54,46 @@ export const getPost = async (req: Request, res: Response) => {
 
   res.send(success(result[0]));
 };
+
+// 게시글 등록
+export const postPost = async (req: Request, res: Response) => {
+  const LANG_SQ = req?.query?.LANG_SQ ?? req?.body?.LANG_SQ ?? null;
+  const POST_TTL = req?.query?.POST_TTL ?? req?.body?.POST_TTL ?? null;
+  const POST_CN = req?.query?.POST_CN ?? req?.body?.POST_CN ?? null;
+  const POST_CD = req?.query?.POST_CD ?? req?.body?.POST_CD ?? null;
+
+  if (!LANG_SQ || !POST_TTL || !POST_CN)
+    return res.send(fail('필수 내용을 입력해주세요.'));
+
+  const {error} = await SQL(
+    `
+    INSERT INTO tb_post (
+      LANG_SQ, POST_TTL, POST_CN, POST_CD
+    ) VALUES (
+      ?, ?, ?, ?
+    );
+  `,
+    [LANG_SQ, POST_TTL, POST_CN, POST_CD],
+  );
+
+  if (error) return res.send(fail('DB에러'));
+
+  res.send(success());
+};
+
+// 게시글 삭제
+export const deletePost = async (req: Request, res: Response) => {
+  const POST_SQ = req?.params?.POST_SQ;
+
+  const {error} = await SQL(
+    `
+    DELETE FROM tb_post
+    WHERE POST_SQ = ?;
+  `,
+    [POST_SQ],
+  );
+
+  if (error) return res.send(fail('DB에러'));
+
+  res.send(success());
+};

@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import {useMemo, useState} from 'react';
 import styled from 'styled-components/native';
 import {useLastTime} from '../functions/utils';
@@ -8,6 +7,7 @@ type Props = {
   line?: number;
   titleComponent?: () => JSX.Element | null;
   time?: Date;
+  minHeight?: number;
   itemClick: () => void;
   itemLongClick?: () => void;
 };
@@ -17,6 +17,7 @@ export default function Item({
   line = 1,
   titleComponent: TitleComponent,
   time,
+  minHeight,
   itemClick,
   itemLongClick,
 }: Props) {
@@ -29,7 +30,10 @@ export default function Item({
   }, []);
 
   return (
-    <Container onPress={itemClick} onLongPress={itemLongClick}>
+    <Container
+      onPress={itemClick}
+      onLongPress={itemLongClick}
+      style={{minHeight: minHeight ?? 45}}>
       <Wrap>
         {TitleComponent ? <TitleComponent /> : null}
         <Contents>
@@ -55,7 +59,6 @@ const Container = styled.TouchableHighlight.attrs(() => ({
 }))`
   border-bottom-color: #eee;
   border-bottom-width: 1px;
-  min-height: 45px;
 `;
 const Wrap = styled.View`
   flex: 1;

@@ -34,7 +34,7 @@ export default function PostDetailScreen({navigation, route}: any) {
   };
 
   const addBook = (): void => {
-    const form = {USER_SQ: 1, POST_SQ: data?.POST_SQ};
+    const form = {USER_SQ: user?.USER_SQ, POST_SQ: data?.POST_SQ};
     http.post('/book', form).then(({data}) => {
       if (data?.result) getData();
     });

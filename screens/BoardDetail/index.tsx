@@ -18,8 +18,8 @@ import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
 import {errorMessage} from '../../public/strings';
 import Modal from '../../layouts/Modal';
-import CreateComment from '../CreateComment';
 import Icon2 from 'react-native-vector-icons/Entypo';
+import CreateCommentScreen from '../CreateComment';
 
 export default function BoardDetailScreen({navigation, route}: any) {
   const isFocus = useIsFocused();
@@ -133,7 +133,7 @@ export default function BoardDetailScreen({navigation, route}: any) {
       ) : null}
 
       <Modal visible={isCreate} style="overFullScreen">
-        <CreateComment
+        <CreateCommentScreen
           id={data?.BD_SQ}
           getData={getData}
           close={() => setIsCreate(false)}

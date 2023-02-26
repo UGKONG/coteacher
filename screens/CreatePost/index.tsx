@@ -141,7 +141,6 @@ const LangText = styled.Text`
 const Input = styled.TextInput.attrs(() => ({
   editable: true,
   multiline: true,
-  maxLength: 100,
 }))`
   flex: 1;
   width: 100%;

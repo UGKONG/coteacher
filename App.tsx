@@ -30,7 +30,7 @@ export default function App() {
     <>
       <StatusBar barStyle={barStyle} />
       <Navigation />
-      <Modal visible={isLoginModal}>
+      <Modal visible={isLoginModal} style="overFullScreen">
         <LoginScreen />
       </Modal>
     </>

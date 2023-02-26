@@ -1,8 +1,11 @@
 import {Router} from 'express';
-import {putUserName} from '../controllers/user';
+import {deleteUser, getUsers, putUserName} from '../controllers/user';
 
 const userRoute = Router();
 
-userRoute.put('/:USER_SQ', putUserName);
+userRoute
+  .get('/', getUsers)
+  .put('/:USER_SQ', putUserName)
+  .delete('/:USER_SQ', deleteUser);
 
 export default userRoute;

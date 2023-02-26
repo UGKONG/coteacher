@@ -38,7 +38,7 @@ export default function HomeStack() {
         name="SearchScreen"
         component={SearchScreen}
         options={{
-          title: '검 색',
+          title: '통 합 검 색',
           headerTitleAlign: 'center',
         }}
       />

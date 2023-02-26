@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {HeaderRight, HeaderTitle} from '../../layouts/Header';
 import BookScreen from '../../screens/Book';
 import PostDetailScreen from '../../screens/PostDetail';
+import SearchScreen from '../../screens/Search';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,6 @@ export default function BookStack() {
           title: '북 마 크',
           headerTitleAlign: 'center',
           headerLeft: HeaderTitle,
-          headerRight: HeaderRight,
         }}
       />
       <Stack.Screen

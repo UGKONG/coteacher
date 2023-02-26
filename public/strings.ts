@@ -1,3 +1,5 @@
+export const version = '1.0.4';
+
 export const colors: {[key: string]: string} = {
   css: '#2E80BF',
   dart: '#3C79C2',
@@ -120,4 +122,5 @@ export const currentTagList = {
   Axios: '#3087BF',
   Cors: '#B19AC2',
   Babel: '#558DEC',
+  소통: '#E49F59',
 };

@@ -8,12 +8,15 @@ import {useIsFocused} from '@react-navigation/native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {Dimensions} from 'react-native';
 import {Languages} from '@rivascva/react-native-code-editor/lib/typescript/languages';
+import {useSelector} from 'react-redux';
+import {Store} from '../../store/index.type';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('screen');
 
 export default function PostDetailScreen({navigation, route}: any) {
   const isFocus = useIsFocused();
   const POST_SQ = route?.params?.POST_SQ ?? 0;
+  const user = useSelector((x: Store) => x?.user);
   const [data, setData] = useState<Post & Language & Book & {IS_BOOK: 0 | 1}>();
 
   const videoSize = useMemo<{width: number; height: number}>(() => {
@@ -23,9 +26,9 @@ export default function PostDetailScreen({navigation, route}: any) {
   }, [screenWidth, screenHeight]);
 
   const getData = (): void => {
-    if (!POST_SQ) return setData(undefined);
+    if (!POST_SQ || !user?.USER_SQ) return setData(undefined);
     http
-      .get('/post/' + POST_SQ + '?USER_SQ=1')
+      .get('/post/' + POST_SQ + '?USER_SQ=' + user?.USER_SQ)
       .then(({data}) => setData(data?.result ? data?.current : undefined))
       .catch(() => setData(undefined));
   };
@@ -95,6 +98,7 @@ const Text = styled.Text`
 const Title = styled(Text)`
   font-size: 18px;
   font-weight: 700;
+  margin-top: 10px;
 `;
 const Contents = styled(Text)`
   font-size: 15px;

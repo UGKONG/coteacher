@@ -15,6 +15,7 @@ export default function Logout() {
     let platform = user?.USER_SNS_NM;
     if (platform === 'kakao') return '#ecce0d';
     if (platform === 'naver') return '#17C85B';
+    if (platform === 'apple') return '#343434';
     return '#555555';
   }, [user?.USER_SNS_NM]);
 
@@ -23,6 +24,7 @@ export default function Logout() {
     if (!platform) return '로그아웃 완료';
     if (platform === 'kakao') return '카카오 로그아웃';
     if (platform === 'naver') return '네이버 로그아웃';
+    if (platform === 'apple') return '애플 로그아웃';
     return '';
   }, [user?.USER_SNS_NM]);
 
@@ -32,7 +34,7 @@ export default function Logout() {
     let doit = () => {
       AsyncStorage.clear(() => {
         dispatch({type: 'user', payload: null});
-        navigation.navigate('Home');
+        navigation.navigate('HomeScreen' as never);
       });
     };
     let buttons: AlertButton[] = [

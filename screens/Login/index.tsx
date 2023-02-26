@@ -1,18 +1,24 @@
 import styled from 'styled-components/native';
 import _Container from '../../layouts/Container';
 import http from '../../functions/http';
-import logoImage from '../../assets/logo2.png';
+import logoImage from '../../assets/logo.png';
 import {Alert, Platform, View, Dimensions} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {useEffect, useMemo, useState} from 'react';
+import {errorMessage} from '../../public/strings';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getProfile as getKakaoProfile,
   KakaoProfile,
   login,
 } from '@react-native-seoul/kakao-login';
 import NaverLogin from '@react-native-seoul/naver-login';
-import {useEffect, useMemo, useState} from 'react';
-import {errorMessage} from '../../public/strings';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import appleAuth, {
+  AppleRequestOperation,
+  AppleRequestScope,
+  AppleCredentialState,
+  AppleError,
+} from '@invertase/react-native-apple-authentication';
 
 const iosKeys = {
   consumerKey: 'o3ice5GwsMQmJShhOxvO',
@@ -39,7 +45,8 @@ export default function LoginScreen() {
 
   const imgSize = useMemo<{width: number; height: number}>(() => {
     let width = screenW * 0.6;
-    let height = width * 2;
+    if (width >= 400) width = 400;
+    let height = width;
     return {width, height};
   }, [screenW, screenH]);
 
@@ -75,7 +82,7 @@ export default function LoginScreen() {
         getKakaoProfile()
           .then((value: KakaoProfile) => {
             let id = value?.id || '';
-            let name = value?.nickname || '';
+            let name = value?.nickname || 'user';
             let img = value?.profileImageUrl || null;
 
             submit({id, name, img, platform, os});
@@ -90,17 +97,30 @@ export default function LoginScreen() {
     NaverLogin.login(naverLoginRequest)
       .then(({failureResponse, successResponse}) => {
         const token = successResponse?.accessToken;
-        if (failureResponse || !token) {
-          failureResponse && console.log(failureResponse);
-          return;
-        }
+        if (failureResponse || !token) return;
 
         NaverLogin.getProfile(token).then(({response}) => {
           let id: string = response?.id ?? '';
-          let name: string = response?.name ?? '';
+          let name: string = response?.name ?? 'user';
           let img = response?.profile_image || null;
           submit({id, name, img, platform, os});
         });
+      })
+      .catch(() => {});
+  };
+
+  const appleLogin = (): void => {
+    let platform: SnsPlatform = 'apple';
+    appleAuth
+      .performRequest({
+        requestedOperation: 1,
+        requestedScopes: [0, 1],
+      })
+      .then(response => {
+        let id = response?.user ?? '';
+        let name = 'user';
+        let img = null;
+        submit({id, img, name, platform, os});
       })
       .catch(() => {});
   };
@@ -131,11 +151,9 @@ export default function LoginScreen() {
 
   return (
     <Container>
-      <View />
-      <Logo
-        source={logoImage}
-        style={{width: imgSize.width, height: imgSize.height}}
-      />
+      <ImageContainer>
+        <Logo source={logoImage} style={imgSize} />
+      </ImageContainer>
       <ButtonContainer>
         <Description>서비스 이용을 위해 로그인을 해주세요.</Description>
         <CheckContainer onPress={() => setIsAuto(prev => !prev)}>
@@ -147,12 +165,17 @@ export default function LoginScreen() {
             자동로그인
           </Label>
         </CheckContainer>
-        <SubmitBtn color="#17C85B" onPress={naverLogin}>
-          <SubmitBtnText>네이버 로그인</SubmitBtnText>
-        </SubmitBtn>
         <SubmitBtn color="#ecce0d" onPress={kakaoLogin}>
           <SubmitBtnText>카카오 로그인</SubmitBtnText>
         </SubmitBtn>
+        <SubmitBtn color="#17C85B" onPress={naverLogin}>
+          <SubmitBtnText>네이버 로그인</SubmitBtnText>
+        </SubmitBtn>
+        {os === 'ios' ? (
+          <SubmitBtn color="#343434" onPress={appleLogin}>
+            <SubmitBtnText>애플 로그인</SubmitBtnText>
+          </SubmitBtn>
+        ) : null}
       </ButtonContainer>
     </Container>
   );
@@ -162,12 +185,15 @@ const Container = styled(_Container.View)`
   position: relative;
   justify-content: space-between;
 `;
-const Logo = styled.ImageBackground.attrs(() => ({
-  resizeMode: 'contain',
-}))`
-  max-width: 300px;
-  margin: 10% 0 0;
+const ImageContainer = styled.View`
+  flex: 1;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
 `;
+const Logo = styled.Image.attrs(() => ({
+  resizeMode: 'contain',
+}))``;
 const Description = styled.Text`
   color: #a7a7a7;
   text-align: center;
@@ -203,7 +229,6 @@ const Label = styled.Text`
 `;
 const ButtonContainer = styled.View`
   margin: 10px;
-  flex: 1;
   align-self: stretch;
   justify-content: flex-end;
 `;

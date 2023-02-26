@@ -10,9 +10,12 @@ import {Alert} from 'react-native';
 import {colors} from '../../public/strings';
 import SearchBar from '../../layouts/SearchBar';
 import {useSearchHangul} from '../../functions/utils';
+import {useSelector} from 'react-redux';
+import {Store} from '../../store/index.type';
 
 export default function BookScreen({navigation}: any) {
   const isFocus = useIsFocused();
+  const user = useSelector((x: Store) => x?.user);
   const [isLoad, setIsLoad] = useState<boolean>(true);
   const [list, setList] = useState<(Book & Language & Post)[]>([]);
   const [value, setValue] = useState<string>('');
@@ -36,8 +39,9 @@ export default function BookScreen({navigation}: any) {
   }, [list, value, sort]);
 
   const getList = (): void => {
+    if (!user?.USER_SQ) return;
     http
-      .get('/book?USER_SQ=1')
+      .get('/book?USER_SQ=' + user?.USER_SQ)
       .then(({data}) => setList(data?.result ? data?.current : []))
       .catch(() => {})
       .finally(() => setIsLoad(false));

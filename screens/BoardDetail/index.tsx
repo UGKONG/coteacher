@@ -2,7 +2,7 @@ import _Container from '../../layouts/Container';
 import {useEffect, useMemo, useState} from 'react';
 import http from '../../functions/http';
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import ItemHeader from '../Board/ItemHeader';
 import NoneItem from '../../layouts/NoneItem';
@@ -10,7 +10,6 @@ import CommentItem from './CommentItem';
 import Background from '../../layouts/Background';
 import ImageViewer from '../../layouts/ImageViewer';
 import ItemBottom from '../Board/ItemBottom';
-import CommentForm from './CommentForm';
 import ItemTag from '../Board/ItemTag';
 import Loading from '../../layouts/Loading';
 import HeaderIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -18,6 +17,9 @@ import {Alert, AlertButton} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
 import {errorMessage} from '../../public/strings';
+import Modal from '../../layouts/Modal';
+import CreateComment from '../CreateComment';
+import Icon2 from 'react-native-vector-icons/Entypo';
 
 export default function BoardDetailScreen({navigation, route}: any) {
   const isFocus = useIsFocused();
@@ -25,10 +27,11 @@ export default function BoardDetailScreen({navigation, route}: any) {
   const [list, setList] = useState<BoardComment[]>([]);
   const [isImgView, setImgView] = useState<string | null>(null);
   const [isLoad, setIsLoad] = useState<boolean>(true);
+  const [isCreate, setIsCreate] = useState<boolean>(false);
   const user = useSelector((x: Store) => x?.user);
 
   const isMyBoard = useMemo<boolean>(() => {
-    return data?.USER_SQ === user?.USER_SQ;
+    return user?.USER_SQ === 1 || data?.USER_SQ === user?.USER_SQ;
   }, [data?.USER_SQ, user?.USER_SQ]);
 
   const init = (): void => {
@@ -94,25 +97,32 @@ export default function BoardDetailScreen({navigation, route}: any) {
           view={data?.BD_VIEW_CNT}
           comment={Math.max(data?.BD_CMT_CNT, list?.length)}
         />
+
         <Margin />
+
         <CommentTitle>
           <CommentIcon />
           <CommentTitleText>댓글</CommentTitleText>
+          <CreateCommentBtn onPress={() => setIsCreate(true)}>
+            <CreateCommentBtnIcon />
+          </CreateCommentBtn>
         </CommentTitle>
-
         <Line />
-
-        <CommentForm id={data?.BD_SQ} getData={getData} />
-
         {isLoad ? (
           <Loading />
         ) : !list?.length ? (
-          <NoneItem text="등록된 댓글이 없습니다." style={{height: 50}} />
+          <NoneItem text="등록된 댓글이 없습니다." style={{height: 100}} />
         ) : (
-          list?.map(item => (
-            <CommentItem key={item?.CMT_SQ} data={item} getData={getData} />
+          list?.map((item, i) => (
+            <CommentItem
+              key={item?.CMT_SQ}
+              isLast={i === list?.length - 1}
+              data={item}
+              getData={getData}
+            />
           ))
         )}
+        <Margin style={{marginTop: 0, backgroundColor: '#fff'}} />
       </Container>
 
       {isImgView ? (
@@ -121,6 +131,14 @@ export default function BoardDetailScreen({navigation, route}: any) {
           <ImageViewer img={isImgView} />
         </>
       ) : null}
+
+      <Modal visible={isCreate} style="overFullScreen">
+        <CreateComment
+          id={data?.BD_SQ}
+          getData={getData}
+          close={() => setIsCreate(false)}
+        />
+      </Modal>
     </>
   ) : null;
 }
@@ -147,8 +165,9 @@ const CommentTitle = styled.View`
   padding: 14px;
   align-items: center;
   flex-direction: row;
+  position: relative;
 `;
-const CommentIcon = styled(Icon).attrs(() => ({
+const CommentIcon = styled(Icon1).attrs(() => ({
   name: 'chatbubble-ellipses-outline',
 }))`
   font-size: 18px;
@@ -178,5 +197,18 @@ const DelIcon = styled(HeaderIcon).attrs(() => ({
   name: 'trash',
 }))`
   ${iconStyle}
-  color: #ff4343;
+  color: #ff5656;
+`;
+const CreateCommentBtn = styled.TouchableOpacity.attrs(() => ({
+  activeOpacity: 0.8,
+}))`
+  padding: 7px 14px;
+  position: absolute;
+  right: 0;
+`;
+const CreateCommentBtnIcon = styled(Icon2).attrs(() => ({
+  name: 'pencil',
+}))`
+  color: #839191;
+  font-size: 22px;
 `;

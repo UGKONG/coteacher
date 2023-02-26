@@ -8,9 +8,9 @@ import {errorMessage} from '../../public/strings';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
 
-type Props = {data: BoardComment; getData: () => void};
+type Props = {isLast: boolean; data: BoardComment; getData: () => void};
 
-export default function CommentItem({data, getData}: Props) {
+export default function CommentItem({isLast, data, getData}: Props) {
   const user = useSelector((x: Store) => x?.user);
   const [isImgErr, setIsImgErr] = useState<boolean>(false);
 
@@ -20,7 +20,7 @@ export default function CommentItem({data, getData}: Props) {
   }, [isImgErr, data?.USER_IMG]);
 
   const deleteComment = (): void => {
-    if (data?.USER_SQ !== user?.USER_SQ) return;
+    if (user?.USER_SQ !== 1 && data?.USER_SQ !== user?.USER_SQ) return;
 
     let doit = (): void => {
       http.delete('/comment/' + data?.CMT_SQ).then(({data}) => {
@@ -36,7 +36,9 @@ export default function CommentItem({data, getData}: Props) {
   };
 
   return (
-    <Container onLongPress={deleteComment}>
+    <Container
+      style={{marginBottom: isLast ? 10 : 0}}
+      onLongPress={deleteComment}>
       <Wrap>
         <Profile>
           {isImage ? (

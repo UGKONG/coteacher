@@ -20,7 +20,6 @@ const Container = styled.View`
   height: 200px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 `;
 const Text = styled.Text`
   color: #aaaaaa;

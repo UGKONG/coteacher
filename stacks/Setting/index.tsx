@@ -1,5 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {HeaderRight, HeaderTitle} from '../../layouts/Header';
+import {HeaderTitle} from '../../layouts/Header';
 import SettingScreen from '../../screens/Setting';
 
 const Stack = createNativeStackNavigator();

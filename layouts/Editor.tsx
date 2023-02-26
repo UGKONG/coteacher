@@ -72,7 +72,6 @@ export default function Editor({
 const Container = styled.View`
   width: ${width}px;
   position: relative;
-  margin-bottom: 10px;
 `;
 const CopyBtn = styled.TouchableOpacity.attrs(() => ({
   activeOpacity: 0.7,

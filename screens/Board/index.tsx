@@ -29,7 +29,8 @@ export default function BoardScreen({navigation}: any) {
     return copy?.filter(x => {
       let valid1 = useSearchHangul(x?.BD_TAG, value);
       let valid2 = useSearchHangul(x?.BD_CN, value);
-      return valid1 || valid2;
+      let valid3 = useSearchHangul(x?.USER_NM, value);
+      return valid1 || valid2 || valid3;
     });
   }, [list, value, sort]);
 

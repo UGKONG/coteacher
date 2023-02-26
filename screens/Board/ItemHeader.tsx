@@ -43,7 +43,7 @@ export default function ItemHeader({
         )}
       </Profile>
       <ProfileInfo>
-        <Name size={size}>{name}</Name>
+        <Name size={size}>{name ?? '이름없음'}</Name>
         <Time size={size}>{useLastTime(new Date(date))}</Time>
       </ProfileInfo>
     </Container>
@@ -83,12 +83,15 @@ const NoneImage = styled.View<{styled: string}>`
   ${x => x?.styled}
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: flex-end;
 `;
 const PersonIcon = styled(Icon).attrs(() => ({
   name: 'person',
 }))`
   color: #999999;
-  font-size: 28px;
+  font-size: 38px;
+  margin-bottom: -5px;
 `;
 const ProfileInfo = styled.View`
   justify-content: space-around;

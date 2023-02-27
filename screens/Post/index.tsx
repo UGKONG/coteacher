@@ -98,13 +98,6 @@ export default function PostScreen({navigation, route}: any) {
             <Item
               key={item?.POST_SQ}
               title={item?.POST_TTL}
-              titleComponent={() =>
-                item?.POST_FRAMEWORK_NM ? (
-                  <FrameworkName color={item?.POST_FRAMEWORK_NM}>
-                    {item?.POST_FRAMEWORK_NM}
-                  </FrameworkName>
-                ) : null
-              }
               minHeight={68}
               time={new Date(item?.POST_CRT_DT)}
               itemClick={() => {

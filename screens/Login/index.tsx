@@ -13,12 +13,7 @@ import {
   login,
 } from '@react-native-seoul/kakao-login';
 import NaverLogin from '@react-native-seoul/naver-login';
-import appleAuth, {
-  AppleRequestOperation,
-  AppleRequestScope,
-  AppleCredentialState,
-  AppleError,
-} from '@invertase/react-native-apple-authentication';
+import appleAuth from '@invertase/react-native-apple-authentication';
 
 const iosKeys = {
   consumerKey: 'o3ice5GwsMQmJShhOxvO',

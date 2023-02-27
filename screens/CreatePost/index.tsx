@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useRef, useState} from 'react';
-import {Alert, TextInput, Dimensions} from 'react-native';
+import {Alert, TextInput, Dimensions, Vibration} from 'react-native';
 import http from '../../functions/http';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
@@ -31,6 +31,10 @@ export default function CreatePostScreen({getList, lang, close}: Props) {
   });
 
   const submit = (): void => {
+    if (!value.POST_TTL || !user) {
+      if (titleRef.current) titleRef.current?.focus();
+      return;
+    }
     if (!value.POST_CN || !user) {
       if (contentsRef.current) contentsRef.current?.focus();
       return;
@@ -40,11 +44,17 @@ export default function CreatePostScreen({getList, lang, close}: Props) {
     http
       .post('/post', value)
       .then(({data}) => {
-        if (!data?.result) return Alert.alert('오류', errorMessage);
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
         getList();
         close();
       })
-      .catch(() => Alert.alert('오류', errorMessage))
+      .catch(() => {
+        Vibration.vibrate();
+        return Alert.alert('오류', errorMessage);
+      })
       .finally(() => setIsPending(false));
   };
 

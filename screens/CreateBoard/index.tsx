@@ -2,7 +2,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import _Container from '../../layouts/Container';
 import http from '../../functions/http';
 import styled from 'styled-components/native';
-import {Alert, Dimensions, TextInput} from 'react-native';
+import {Alert, Dimensions, TextInput, Vibration} from 'react-native';
 import {errorMessage} from '../../public/strings';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
@@ -43,11 +43,17 @@ export default function CreateBoardScreen({navigation, route}: any) {
     http
       .post('/board', value)
       .then(({data}) => {
-        if (!data?.result) return Alert.alert('오류', errorMessage);
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
         Alert.alert('게시글 등록', '등록되었습니다.');
         navigation.navigate('BoardScreen');
       })
-      .catch(() => Alert.alert('오류', errorMessage))
+      .catch(() => {
+        Vibration.vibrate();
+        return Alert.alert('오류', errorMessage);
+      })
       .finally(() => setIsPending(false));
   };
 

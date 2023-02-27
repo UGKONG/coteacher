@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useRef, useState} from 'react';
-import {Alert, TextInput, Dimensions} from 'react-native';
+import {Alert, TextInput, Dimensions, Vibration} from 'react-native';
 import http from '../../functions/http';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
@@ -30,12 +30,18 @@ export default function CreateCommentScreen({id, getData, close}: Props) {
     http
       .post('/comment/' + id, form)
       .then(({data}) => {
-        if (!data?.result) return Alert.alert('오류', errorMessage);
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
         setValue('');
         getData();
         close();
       })
-      .catch(() => Alert.alert('오류', errorMessage))
+      .catch(() => {
+        Vibration.vibrate();
+        return Alert.alert('오류', errorMessage);
+      })
       .finally(() => setIsPending(false));
   };
 

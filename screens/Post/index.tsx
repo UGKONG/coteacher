@@ -15,7 +15,7 @@ import CreatePostScreen from '../CreatePost';
 import Modal from '../../layouts/Modal';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
-import {Alert, AlertButton} from 'react-native';
+import {Alert, AlertButton, Vibration} from 'react-native';
 
 export default function PostScreen({navigation, route}: any) {
   const isFocus = useIsFocused();
@@ -60,11 +60,17 @@ export default function PostScreen({navigation, route}: any) {
           http
             .delete('/post/' + POST_SQ)
             .then(({data}) => {
-              if (!data?.result) return Alert.alert('오류', errorMessage);
+              if (!data?.result) {
+                Vibration.vibrate();
+                return Alert.alert('오류', errorMessage);
+              }
               Alert.alert('삭제완료', '삭제되었습니다.');
               getList();
             })
-            .catch(() => Alert.alert('오류', errorMessage));
+            .catch(() => {
+              Vibration.vibrate();
+              return Alert.alert('오류', errorMessage);
+            });
         },
       },
       {text: '아니요'},

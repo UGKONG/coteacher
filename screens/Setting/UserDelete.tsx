@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert, AlertButton} from 'react-native';
+import {Alert, AlertButton, Vibration} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components/native';
 import http from '../../functions/http';
@@ -12,6 +12,8 @@ export default function UserDelete() {
 
   const fail = (): void => {
     Alert.alert('오류', errorMessage);
+    Vibration.vibrate();
+    return Alert.alert('오류', errorMessage);
   };
 
   const success = (): void => {

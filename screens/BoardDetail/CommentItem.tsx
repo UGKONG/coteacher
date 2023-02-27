@@ -2,7 +2,7 @@ import {useMemo, useState} from 'react';
 import styled from 'styled-components/native';
 import {useLastTime} from '../../functions/utils';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Alert, AlertButton} from 'react-native';
+import {Alert, AlertButton, Vibration} from 'react-native';
 import http from '../../functions/http';
 import {errorMessage} from '../../public/strings';
 import {useSelector} from 'react-redux';
@@ -24,7 +24,10 @@ export default function CommentItem({isLast, data, getData}: Props) {
 
     let doit = (): void => {
       http.delete('/comment/' + data?.CMT_SQ).then(({data}) => {
-        if (!data?.result) return Alert.alert('오류', errorMessage);
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
         getData();
       });
     };

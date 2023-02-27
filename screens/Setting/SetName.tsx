@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Alert, TextInput} from 'react-native';
+import {Alert, TextInput, Vibration} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import http from '../../functions/http';
 import ButtonLoading from '../../layouts/ButtonLoading';
@@ -33,11 +33,17 @@ export default function SetName() {
     http
       .put('/user/' + user?.USER_SQ, form)
       .then(({data}) => {
-        if (!data?.result) return Alert.alert('오류', errorMessage);
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
         dispatch({type: 'user', payload: {...user, USER_NM: name}});
         if (inputRef.current) inputRef.current.blur();
       })
-      .catch(() => Alert.alert('오류', errorMessage))
+      .catch(() => {
+        Vibration.vibrate();
+        return Alert.alert('오류', errorMessage);
+      })
       .finally(() => setTimeout(() => setIsPending(false), 1000));
   };
 

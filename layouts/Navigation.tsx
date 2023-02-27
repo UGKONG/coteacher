@@ -9,11 +9,14 @@ const Tab = createBottomTabNavigator();
 export default function Navigation() {
   const navigationList = useNavigationList();
 
+  const tabPress = (): void => {};
+
   return (
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName="Home"
-        screenOptions={() => ({headerShown: false})}>
+        screenOptions={() => ({headerShown: false})}
+        screenListeners={{tabPress: tabPress}}>
         {navigationList?.map(item => (
           <Tab.Screen
             key={item?.id}

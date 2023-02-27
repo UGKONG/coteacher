@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import _Container from '../../layouts/Container';
 import http from '../../functions/http';
 import logoImage from '../../assets/logo.png';
-import {Alert, Platform, View, Dimensions} from 'react-native';
+import {Alert, Platform, View, Dimensions, Vibration} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {useEffect, useMemo, useState} from 'react';
 import {errorMessage} from '../../public/strings';
@@ -52,7 +52,8 @@ export default function LoginScreen() {
 
   const errorCallback = (): void => {
     dispatch({type: 'user', payload: null});
-    Alert.alert('오류', errorMessage);
+    Vibration.vibrate();
+    return Alert.alert('오류', errorMessage);
   };
 
   const submit = (data: LoginData): void => {

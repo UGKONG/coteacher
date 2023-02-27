@@ -13,7 +13,7 @@ import ItemBottom from '../Board/ItemBottom';
 import ItemTag from '../Board/ItemTag';
 import Loading from '../../layouts/Loading';
 import HeaderIcon from 'react-native-vector-icons/SimpleLineIcons';
-import {Alert, AlertButton} from 'react-native';
+import {Alert, AlertButton, Vibration} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Store} from '../../store/index.type';
 import {errorMessage} from '../../public/strings';
@@ -52,11 +52,17 @@ export default function BoardDetailScreen({navigation, route}: any) {
       http
         .delete('/board/' + data?.BD_SQ)
         .then(({data}) => {
-          if (!data?.result) return Alert.alert('오류', errorMessage);
+          if (!data?.result) {
+            Vibration.vibrate();
+            return Alert.alert('오류', errorMessage);
+          }
           Alert.alert('삭제 완료', '게시글이 삭제되었습니다.');
           navigation.navigate('BoardScreen');
         })
-        .catch(() => Alert.alert('오류', errorMessage));
+        .catch(() => {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        });
     };
 
     let buttons: AlertButton[] = [

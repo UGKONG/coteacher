@@ -4,6 +4,7 @@ import {Dispatch, Store} from './index.type';
 // Store Current State
 const currentState: Store = {
   user: null,
+  isNoticeWatch: false,
 };
 
 // Store Reducer

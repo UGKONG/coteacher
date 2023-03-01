@@ -1,4 +1,4 @@
-export const version = '1.1.0';
+export const version = '1.1.3';
 
 export const colors: {[key: string]: string} = {
   css: '#2E80BF',
@@ -53,6 +53,10 @@ export const animals = [
   '소쩍새',
   '비둘기',
   '앵무새',
+  '호랑이',
+  '자라',
+  '킹콩',
+  '오랑우탄',
 ];
 
 export const errorMessage = '서비스 상태가 원활하지 않습니다.';

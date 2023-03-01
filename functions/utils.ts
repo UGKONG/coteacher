@@ -1,3 +1,5 @@
+// yarn add @toss/hangul @toss/date @toss/validators @toss/utils
+
 import axios from 'axios';
 import {
   hangulIncludes,
@@ -737,7 +739,7 @@ export const useSearchHangul = (
   searchText?: string,
 ): boolean => {
   let _current = current?.toLocaleLowerCase()?.replace(/ /g, '');
-  let _searchText = (searchText ?? '')?.replace(/ /g, '');
+  let _searchText = (searchText ?? '')?.toLocaleLowerCase()?.replace(/ /g, '');
 
   let bool1 = hangulIncludes(_current, _searchText);
   let bool2 = chosungIncludes(_current, _searchText);

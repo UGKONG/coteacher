@@ -2,14 +2,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../../screens/Home';
 import PostScreen from '../../screens/Post';
 import PostDetailScreen from '../../screens/PostDetail';
-import {useSelector} from 'react-redux';
-import {Store} from '../../store/index.type';
-import {Platform} from 'react-native';
 import {HeaderRight, HeaderTitle} from '../../layouts/Header';
 import SearchScreen from '../../screens/Search';
 
 const Stack = createNativeStackNavigator();
-const os = Platform.OS;
 
 export default function HomeStack() {
   return (

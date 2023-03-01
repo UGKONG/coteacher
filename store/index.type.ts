@@ -5,4 +5,5 @@ export type Dispatch = {
 
 export type Store = {
   user: null | User;
+  isNoticeWatch: boolean;
 };

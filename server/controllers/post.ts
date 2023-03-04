@@ -81,6 +81,31 @@ export const postPost = async (req: Request, res: Response) => {
   res.send(success());
 };
 
+// 게시글 수정
+export const putPost = async (req: Request, res: Response) => {
+  const POST_SQ = req?.params?.POST_SQ;
+  const LANG_SQ = req?.query?.LANG_SQ ?? req?.body?.LANG_SQ ?? null;
+  const POST_TTL = req?.query?.POST_TTL ?? req?.body?.POST_TTL ?? null;
+  const POST_CN = req?.query?.POST_CN ?? req?.body?.POST_CN ?? null;
+  const POST_CD = req?.query?.POST_CD ?? req?.body?.POST_CD ?? null;
+
+  if (!LANG_SQ || !POST_TTL || !POST_CN)
+    return res.send(fail('필수 내용을 입력해주세요.'));
+
+  const {error} = await SQL(
+    `
+    UPDATE tb_post SET
+    POST_TTL = ?, POST_CN = ?, POST_CD = ?
+    WHERE POST_SQ = ?;
+  `,
+    [POST_TTL, POST_CN, POST_CD, POST_SQ],
+  );
+
+  if (error) return res.send(fail('DB에러'));
+
+  res.send(success());
+};
+
 // 게시글 삭제
 export const deletePost = async (req: Request, res: Response) => {
   const POST_SQ = req?.params?.POST_SQ;

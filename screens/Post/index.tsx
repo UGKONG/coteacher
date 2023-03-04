@@ -27,6 +27,7 @@ export default function PostScreen({navigation, route}: any) {
   const [value, setValue] = useState<string>('');
   const [sort, setSort] = useState<boolean>(true);
   const [isCreate, setIsCreate] = useState<boolean>(false);
+  const [modifySq, setModifySq] = useState<number>(0);
 
   const searchList = useMemo<Post[]>(() => {
     let copy = [...list];
@@ -49,33 +50,37 @@ export default function PostScreen({navigation, route}: any) {
       .finally(() => setIsLoad(false));
   };
 
-  const deleteItem = (POST_SQ: number): void => {
+  const edit = (POST_SQ: number): void => {
+    setModifySq(POST_SQ);
+    setIsCreate(true);
+  };
+
+  const del = (POST_SQ: number): void => {
+    http
+      .delete('/post/' + POST_SQ)
+      .then(({data}) => {
+        if (!data?.result) {
+          Vibration.vibrate();
+          return Alert.alert('오류', errorMessage);
+        }
+        Alert.alert('삭제완료', '삭제되었습니다.');
+        getList();
+      })
+      .catch(() => {
+        Vibration.vibrate();
+        return Alert.alert('오류', errorMessage);
+      });
+  };
+
+  const modifyItem = (POST_SQ: number): void => {
     if (user?.USER_SQ !== 1) return;
 
     const buttons: AlertButton[] = [
-      {
-        text: '예',
-        style: 'destructive',
-        onPress: () => {
-          http
-            .delete('/post/' + POST_SQ)
-            .then(({data}) => {
-              if (!data?.result) {
-                Vibration.vibrate();
-                return Alert.alert('오류', errorMessage);
-              }
-              Alert.alert('삭제완료', '삭제되었습니다.');
-              getList();
-            })
-            .catch(() => {
-              Vibration.vibrate();
-              return Alert.alert('오류', errorMessage);
-            });
-        },
-      },
-      {text: '아니요'},
+      {text: '수정', onPress: () => edit(POST_SQ)},
+      {text: '삭제', style: 'destructive', onPress: () => del(POST_SQ)},
+      {text: '취소'},
     ];
-    Alert.alert('항목삭제', '항목을 삭제하시겠습니까?', buttons);
+    Alert.alert('항목수정', '항목을 수정하시겠습니까?', buttons);
   };
 
   const setOptions = (): void => {
@@ -111,7 +116,7 @@ export default function PostScreen({navigation, route}: any) {
                   POST_SQ: item?.POST_SQ,
                 });
               }}
-              itemLongClick={() => deleteItem(item?.POST_SQ)}
+              itemLongClick={() => modifyItem(item?.POST_SQ)}
             />
           ))
         )}
@@ -119,10 +124,16 @@ export default function PostScreen({navigation, route}: any) {
 
       {user?.USER_SQ === 1 && (
         <>
-          <CreateButton onPress={() => setIsCreate(true)} />
+          <CreateButton
+            onPress={() => {
+              setModifySq(0);
+              setIsCreate(true);
+            }}
+          />
 
           <Modal visible={isCreate} style="overFullScreen">
             <CreatePostScreen
+              modifySq={modifySq}
               getList={getList}
               lang={{sq: LANG_SQ, nm: LANG_NM}}
               close={() => setIsCreate(false)}

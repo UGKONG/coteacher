@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Alert, TextInput, Dimensions, Vibration} from 'react-native';
 import http from '../../functions/http';
 import {useSelector} from 'react-redux';
@@ -12,12 +12,19 @@ import _Container from '../../layouts/Container';
 
 const {height} = Dimensions.get('screen');
 type Props = {
+  modifySq: number;
   getList: () => void;
   lang: {sq: number; nm: string};
   close: () => void;
 };
 
-export default function CreatePostScreen({getList, lang, close}: Props) {
+export default function CreatePostScreen({
+  modifySq,
+  getList,
+  lang,
+  close,
+}: Props) {
+  const POST_SQ = modifySq;
   const titleRef = useRef<TextInput>(null);
   const contentsRef = useRef<TextInput>(null);
   const codeRef = useRef<TextInput>(null);
@@ -41,8 +48,11 @@ export default function CreatePostScreen({getList, lang, close}: Props) {
     }
     setIsPending(true);
 
-    http
-      .post('/post', value)
+    const method = POST_SQ ? 'put' : 'post';
+    const url = POST_SQ ? '/post/' + POST_SQ : '/post';
+    const param = POST_SQ ? value : undefined;
+
+    http[method](url, param)
       .then(({data}) => {
         if (!data?.result) {
           Vibration.vibrate();
@@ -61,6 +71,20 @@ export default function CreatePostScreen({getList, lang, close}: Props) {
   const changeValue = (key: keyof typeof value, val: string): void => {
     setValue(prev => ({...prev, [key]: val}));
   };
+
+  const getData = (sq: number): void => {
+    if (!sq || !user?.USER_SQ) return;
+    http
+      .get('/post/' + sq + '?USER_SQ=' + user?.USER_SQ)
+      .then(({data}) => {
+        setValue(data?.result ? data?.current : undefined);
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    if (POST_SQ) getData(POST_SQ);
+  }, [POST_SQ]);
 
   return (
     <Container>

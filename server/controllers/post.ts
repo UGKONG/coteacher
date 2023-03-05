@@ -62,8 +62,10 @@ export const postPost = async (req: Request, res: Response) => {
   const POST_CN = req?.query?.POST_CN ?? req?.body?.POST_CN ?? null;
   const POST_CD = req?.query?.POST_CD ?? req?.body?.POST_CD ?? null;
 
-  if (!LANG_SQ || !POST_TTL || !POST_CN)
+  if (!LANG_SQ || !POST_TTL || !POST_CN) {
+    console.log(LANG_SQ, POST_TTL, POST_CN);
     return res.send(fail('필수 내용을 입력해주세요.'));
+  }
 
   const {error} = await SQL(
     `

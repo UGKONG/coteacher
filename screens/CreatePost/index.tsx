@@ -50,9 +50,8 @@ export default function CreatePostScreen({
 
     const method = POST_SQ ? 'put' : 'post';
     const url = POST_SQ ? '/post/' + POST_SQ : '/post';
-    const param = POST_SQ ? value : undefined;
 
-    http[method](url, param)
+    http[method](url, value)
       .then(({data}) => {
         if (!data?.result) {
           Vibration.vibrate();
@@ -77,7 +76,8 @@ export default function CreatePostScreen({
     http
       .get('/post/' + sq + '?USER_SQ=' + user?.USER_SQ)
       .then(({data}) => {
-        setValue(data?.result ? data?.current : undefined);
+        if (!data?.result) return;
+        setValue(data?.current);
       })
       .catch(() => {});
   };
